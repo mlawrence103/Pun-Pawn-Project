@@ -5,6 +5,9 @@ const Pun = db.define("pun", {
   content: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   },
   author: {
     type: Sequelize.STRING,
@@ -17,6 +20,7 @@ const Pun = db.define("pun", {
       isNumeric: true,
       isDecimal: true,
       min: 0,
+      notEmpty: true,
     },
   },
   quantity: {
@@ -25,6 +29,7 @@ const Pun = db.define("pun", {
       isNumeric: true,
       isInt: true,
       min: 0,
+      notEmpty: true,
     },
   },
 });
