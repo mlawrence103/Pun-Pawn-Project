@@ -3,28 +3,28 @@ const db = require('../db')
 
 const Order = db.define('order', {
     status : {
-        type: Sequelize.ENUM('open', 'fulfilled'),
+        type: Sequelize.ENUM('open', 'pending', 'fulfilled'),
         allowNull: false
     },
-    emailAdress:{
-        type: sequelize.STRING,
+    emailAddress:{
+        type: Sequelize.STRING,
         validate: {
             isEmail: true
         }
     },
-    shippingAdressName: {
-        type: Sequelize.string
-    },
-    shippingAdressStreet: {
+    shippingAddressName: {
         type: Sequelize.STRING
     },
-    shippingAdressCity:{
+    shippingAddressStreet: {
         type: Sequelize.STRING
     },
-    shippingAdressState:{
+    shippingAddressCity:{
         type: Sequelize.STRING
     },
-    shippingAdressZip:{
+    shippingAddressState:{
+        type: Sequelize.STRING
+    },
+    shippingAddressZip:{
         type: Sequelize.STRING
     }
   })
