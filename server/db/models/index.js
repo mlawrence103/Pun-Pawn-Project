@@ -12,12 +12,13 @@ const Pun = require('./pun');
 //
 // Puppy.belongsTo(Owner)
 
+//one to many relationship between users and orders
 User.hasMany(Order);
 Order.belongsTo(User);
-Order.belongsToMany(Puns);
-Pun.hasMany(User);
-Pun.belongsToMany(User);
-Order.hasMany(Pun);
+
+//many to many relationship between puns and order
+Order.belongsToMany(Pun, { through: ordersPuns });
+Pun.belongsToMany(User, { through: ordersPuns });
 
 module.exports = {
   // Include your models in this exports object as well!

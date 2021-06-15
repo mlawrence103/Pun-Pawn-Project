@@ -10,14 +10,14 @@ const User = db.define('user', {
   firstName: {
     type: Sequelize.STRING,
     allowNull: false,
-    validte: {
+    validate: {
       notEmpty: true,
     },
   },
   lastName: {
     type: Sequelize.STRING,
     allowNull: false,
-    validte: {
+    validate: {
       notEmpty: true,
     },
   },
@@ -70,7 +70,6 @@ const User = db.define('user', {
   userType: {
     type: Sequelize.ENUM('ADMIN', 'MEMBER'),
     defaultValue: 'MEMBER',
-    allowNull: false,
   },
 });
 
