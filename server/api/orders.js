@@ -1,15 +1,16 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   models: { Order },
-} = require('../db');
+} = require("../db");
 
 //get open order by userId
-router.get('/myCart/:userId', async (req, res, next) => {
+router.get("/myCart/:userId", async (req, res, next) => {
   try {
     //make sure have requireToken
     const userId = req.params.userId;
+    //add eager loading to include where items' order id matches
     const order = await Order.findAll({
-      where: { userId: userId, status: 'open' },
+      where: { userId: userId, status: "open" },
     });
     res.json(order);
   } catch (err) {
@@ -19,9 +20,10 @@ router.get('/myCart/:userId', async (req, res, next) => {
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
-router.get('/orderId/:orderId', async (req, res, next) => {
+router.get("/orderId/:orderId", async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
+    //add eager loading to include where items' order id matches
     const order = await Order.findByPk(orderId);
     res.json(order);
   } catch (error) {
@@ -30,7 +32,7 @@ router.get('/orderId/:orderId', async (req, res, next) => {
 });
 
 //create new order
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
     const order = await Order.create(req.body);
@@ -43,7 +45,7 @@ router.post('/', async (req, res, next) => {
 //edit an order
 //add/edit/delete items
 //checkout edit status
-router.put('/orderId/:orderId', async (req, res, next) => {
+router.put("/orderId/:orderId", async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.orderId);
     //if going to checkout, send same order object with updated status to 'fulfilled'
