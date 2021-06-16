@@ -23,7 +23,8 @@ Pun.belongsToMany(Order, { through: "ordersPuns" });
 module.exports = {
   // Include your models in this exports object as well!
   db,
-  Order,
-  User,
-  Pun,
+  models: {
+    Order,
+    User,
+    Pun}
 };
