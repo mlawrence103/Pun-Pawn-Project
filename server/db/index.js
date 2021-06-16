@@ -5,6 +5,7 @@ const db = require("./db");
 const Order = require("./models/order");
 const User = require("./models/user");
 const Pun = require("./models/pun");
+const LineItem = require("./models/lineItem")
 
 // This is a great place to establish associations between your models
 // (https://sequelize-guides.netlify.com/association-types/).
@@ -17,8 +18,8 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 //many to many relationship between puns and order
-Order.belongsToMany(Pun, { through: "ordersPuns" });
-Pun.belongsToMany(Order, { through: "ordersPuns" });
+Order.belongsToMany(Pun, { through: LineItem });
+Pun.belongsToMany(Order, { through: LineItem });
 
 module.exports = {
   // Include your models in this exports object as well!
@@ -26,5 +27,7 @@ module.exports = {
   models: {
     Order,
     User,
-    Pun}
+    Pun,
+    LineItem
+  }
 };
