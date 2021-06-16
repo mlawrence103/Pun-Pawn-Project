@@ -46,7 +46,7 @@ router.get('/orderId/:orderId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
-    const order = await Order.create(req.body);
+    const order = await Order.create(req.body);//destructure later
     res.status(201).json(order);
   } catch (error) {
     next(error);
