@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Pun} = require('../db/index')
+const {models: {Pun}} = require('../db/index')
 
 router.get('/', async (req, res, next) => {
     try {

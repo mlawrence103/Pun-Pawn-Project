@@ -7,7 +7,7 @@ const { requireToken, isAdmin } = require("./gatekeepingMiddleware");
 
 //for a single user to find their own info/admin to access single user info
 // attach requireToken
-router.get("/:id", requireToken, async (req, res, next) => {
+router.get("/:id",  async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ["password"] },

@@ -1,7 +1,7 @@
 "use strict";
 
 const { db } = require("../server/db");
-const { Order, User, Pun } = require("../server/db");
+const {models: { Order, User, Pun }} = require("../server/db");
 
 /**
  * seed - this function clears the database, updates tables to
