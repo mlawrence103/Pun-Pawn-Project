@@ -14,11 +14,11 @@ const Pun = db.define("pun", {
     defaultValue: "anonymous",
   },
   price: {
-    type: Sequelize.DECIMAL(10, 2),
+    type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
       isNumeric: true,
-      isDecimal: true,
+      isInt: true,
       min: 0,
       notEmpty: true,
     },
@@ -34,4 +34,5 @@ const Pun = db.define("pun", {
   },
 });
 
+//instance method or hook or getters and setters or virtual methods to set price using pennies
 module.exports = Pun;
