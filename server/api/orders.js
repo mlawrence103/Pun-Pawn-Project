@@ -74,8 +74,19 @@ router.post('/addToCart', async (req, res, next) => {
 
 router.delete('/deleteItem', async (req, res, next) => {
   try {
-    const item = LineItem.findByPk(req.body.punId);
-    await lineItem.delete(item);
+    console.log('>>>>> req.body.punId in deleteItem route: ', req.body.punId);
+    console.log(
+      '>>>>> req.body.orderId in deleteItem route: ',
+      req.body.orderId
+    );
+    const item = await LineItem.findOne({
+      where: {
+        punId: req.body.punId,
+        orderId: req.body.orderId,
+      },
+    });
+    console.log('>>>>> item: ', item);
+    await item.destroy();
     res.sendStatus(202);
   } catch (error) {
     next(error);
@@ -86,10 +97,10 @@ router.put('/editLineItem', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
     await lineItem.update({
-      punId,
-      orderId,
-      qty,
-      price,
+      punId: punId,
+      orderId: orderId,
+      quantity: qty,
+      price: price,
     });
     res.sendStatus(202);
   } catch (error) {
