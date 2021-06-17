@@ -1,12 +1,11 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   models: { Order, Pun, LineItem },
-} = require("../db");
-const LineItem = require("../db/models/lineItem");
+} = require('../db');
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
-router.get("/orderId/:orderId", async (req, res, next) => {
+router.get('/orderId/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
     //add eager loading to include where items' order id matches
@@ -29,7 +28,7 @@ router.get("/orderId/:orderId", async (req, res, next) => {
 });
 
 //create new order
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
     const {
@@ -58,7 +57,7 @@ router.post("/", async (req, res, next) => {
 
 //**OPEN ORDER ROUTES */
 
-router.post("/addToCart", async (req, res, next) => {
+router.post('/addToCart', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
     await lineItem.create({ punId, orderId, qty, price });
@@ -67,7 +66,7 @@ router.post("/addToCart", async (req, res, next) => {
   }
 });
 
-router.delete("/deleteItem", async (req, res, next) => {
+router.delete('/deleteItem', async (req, res, next) => {
   try {
     const item = LineItem.findByPk(req.body.punId);
     await lineItem.delete(item);
@@ -76,7 +75,7 @@ router.delete("/deleteItem", async (req, res, next) => {
   }
 });
 
-router.put("/editLineItem", async (req, res, next) => {
+router.put('/editLineItem', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
     await lineItem.update({
@@ -91,7 +90,7 @@ router.put("/editLineItem", async (req, res, next) => {
 });
 
 //checkout edit order status
-router.put("/checkout/orderId/:orderId", async (req, res, next) => {
+router.put('/checkout/orderId/:orderId', async (req, res, next) => {
   try {
     const {
       status,
