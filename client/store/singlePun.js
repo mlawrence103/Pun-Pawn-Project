@@ -17,7 +17,7 @@ export const _updatePun = (pun) => ({
 });
 
 //thunk creators
-export const fetchSingleCampus = (id) => {
+export const fetchSinglePun = (id) => {
   return async (dispatch) => {
     try {
       const res = await axios.get(`api/puns/${id}`);
