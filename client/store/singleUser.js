@@ -19,7 +19,7 @@ export const setUser = (user) => {
 export const fetchUser = (id) => {
   return async (dispatch) => {
     try {
-      const {data} = await axios.get(`/api/${id}`)
+      const {data} = await axios.get(`/api/users/${id}`)
       dispatch(setUser(data))
     }
     catch (error){
@@ -28,7 +28,7 @@ export const fetchUser = (id) => {
   }
 }
 
-export const singingUp = (newUser, history) => {
+export const signingUp = (newUser, history) => {
   return async (dispatch) => {
     try {
       const {data} = await axios.post('/api/users', newUser)
@@ -41,7 +41,7 @@ export const singingUp = (newUser, history) => {
   }
 }
 
-export const updatingAcount = (id, user) => {
+export const updatingAccount = (id, user) => {
   return async (dispatch) => {
     const {data} = await axios.put(`/api/users/${id}`, user)
     dispatch(setUser(data))
@@ -54,6 +54,6 @@ export default function singleUserReducer(user = {}, action) {
     case SET_USER:
       return action.user
     default:
-      return users
+      return user
   }
 }
