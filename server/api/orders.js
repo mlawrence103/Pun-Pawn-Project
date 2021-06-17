@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const {
-  models: { Order, Pun },
+  models: { Order, Pun, LineItem },
 } = require("../db");
+const LineItem = require("../db/models/lineItem");
 
 //get open order by userId
 router.get("/myCart/:userId", async (req, res, next) => {
@@ -82,11 +83,23 @@ router.post("/", async (req, res, next) => {
 
 //edit an order
 //add/edit/delete items
+router.put("/addToCart", async (req, res, next) => {
+  try {
+    await lineItem.create({
+      punId: req.body.punId,
+      orderId: req.body.orderId,
+      quantity: req.body.qty,
+      price: req.body.price,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 //checkout edit status
 router.put("/orderId/:orderId", async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.orderId);
-    //if going to checkout, send same order object with updated status to 'fulfilled'
     await order.update(req.body);
     res.json(order);
   } catch (error) {

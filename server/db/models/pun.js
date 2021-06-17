@@ -19,7 +19,7 @@ const Pun = db.define("pun", {
     validate: {
       isNumeric: true,
       isInt: true,
-      min: 0,
+      min: 1,
       notEmpty: true,
     },
   },
@@ -34,5 +34,5 @@ const Pun = db.define("pun", {
   },
 });
 
-//instance method or hook or getters and setters or virtual methods to set price using pennies
+//1. instance method or 2. hook or 3. getters and setters or 4. virtual methods to set price using pennies
 module.exports = Pun;

@@ -1,17 +1,17 @@
 import axios from "axios";
+import { ids } from "webpack";
 import history from "../history";
 
 // Fetch order including associated items
-// Added item to cart (add item to global state of order)
+// Added item to cart (add item to global state of order) EDIT may be part of the same ADD action
 // Delete item from cart action
-// Edit quantity of items in cart action
 
 //OPEN order = cart
 //action types
 const SET_CART = "SET_CART";
 const ADD_TO_CART = "ADD_TO_CART";
 const DELETE_FROM_CART = "DELETE_FROM_CART";
-const EDIT_QUANTITY = "EDIT_QUANTITY";
+const EDIT_ITEM_QTY = "EDIT_ITEM_QTY";
 
 //action creators
 const setCart = (order) => ({
@@ -29,8 +29,8 @@ const _deleteFromCart = (order) => ({
   order,
 });
 
-const _editQuantity = (order) => ({
-  type: EDIT_QUANTITY,
+const _editItemQty = (order) => ({
+  type: EDIT_ITEM_QTY,
   order,
 });
 
@@ -48,26 +48,46 @@ export const fetchCart = (userId) => {
   };
 };
 
-export const addToCart = (userId) => {
+export const deleteFromCart = (punId) => {
   return async (dispatch) => {
     try {
-      const { data: order } = await axios.put("/api/orders/orderId/");
+      const { data: pun } = await axios.delete();
+      //need to add delete route --> do we need to create a lineItems router?
+      dispatch(_deleteFromCart(pun));
     } catch (error) {
-      console.log("Failed to add to cart", error);
+      console.log("Unable to remove item from cart", error);
     }
   };
 };
 
-//reducer
-export default function orderReducer(state = {}, action) {
+export const editItemQty = ({ punId, orderId, qty, price }) => {
+  return async (dispatch) => {
+    try {
+      const lineItem = { punId, orderId, qty, price };
+      const res = await axios.put("/api/orders/orderId/", lineItem);
+      const updatedLineItem = res.data;
+      updatedLineItem["total"] = qty * price;
+      dispatch(_editItemQty(updatedLineItem));
+    } catch (error) {
+      console.log("Failed to edit cart", error);
+    }
+  };
+};
+
+//initial state
+const initialState = { userId: null, total: 0, items: [] };
+
+export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CART:
       return action.order;
     case ADD_TO_CART:
       return {};
     case DELETE_FROM_CART:
-      return {};
-    case EDIT_QUANTITY:
-      return {};
+      return action.order;
+    case EDIT_ITEM_QTY:
+      return action.order;
+    default:
+      return state;
   }
 }
