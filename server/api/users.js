@@ -22,6 +22,26 @@ router.get('/:id', requireToken, async (req, res, next) => {
   }
 });
 
+//get open order by userId
+router.get("/:id/cart", async (req, res, next) => {
+  try {
+    //make sure have requireToken
+    const userId = req.params.id;
+    //add eager loading to include where items' order id matches
+    const order = await Order.findOne({
+      where: { userId: userId, status: "open" },
+      include: [
+        {
+          model: Pun,
+        },
+      ],
+    });
+    res.json(order);
+  } catch (err) {
+    next(err);
+  }
+});
+
 //get user info for admin (attach requireToken and isAdmin to check for auth)
 router.get('/admin', requireToken, isAdmin, async (req, res, next) => {
   try {
