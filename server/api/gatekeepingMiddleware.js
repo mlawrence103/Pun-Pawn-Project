@@ -1,4 +1,3 @@
-const { ModuleFilenameHelpers } = require('webpack');
 const {
   models: { User },
 } = require('../db');
@@ -34,7 +33,8 @@ const adminOrSelf = async (req, res, next) => {
     const token = req.headers.authorization;
     const user = await User.findByToken(token);
     req.user = user;
-    if (user !== req.user || req.user.userType !== ADMIN) {
+    //if user doesn't exist, it's because couldn't retrieve by token
+    if (user || req.user.userType !== 'ADMIN') {
       return res
         .status(403)
         .send(
