@@ -11,7 +11,7 @@ export const gotSinglePun = (pun) => ({
   pun,
 });
 
-export const updatePun = (pun) => ({
+export const _updatePun = (pun) => ({
   type: UPDATE_PUN,
   pun,
 });
@@ -28,3 +28,28 @@ export const fetchSingleCampus = (id) => {
     }
   };
 };
+
+export const updatePun = (pun, history) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.put(`api/puns/${pun.id}`, pun);
+      const updatedPun = res.data;
+      dispatch(_updatePun(updatedPun));
+      history.push(`/puns/${pun.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+//single pun reducer
+export default function singlePunReducer(state = {}, action) {
+  switch (action.type) {
+    case GOT_SINGLE_PUN_FROM_SERVER:
+      return action.pun;
+    case UPDATE_PUN:
+      return action.pun;
+    default:
+      return state;
+  }
+}

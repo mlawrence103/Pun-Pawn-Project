@@ -35,7 +35,7 @@ export const fetchPuns = () => {
   };
 };
 
-export const createPun = () => {
+export const createPun = (pun, history) => {
   return async (dispatch) => {
     try {
       const res = await axios.post('/api/puns', pun);
