@@ -74,18 +74,12 @@ router.post('/addToCart', async (req, res, next) => {
 
 router.delete('/deleteItem', async (req, res, next) => {
   try {
-    console.log('>>>>> req.body.punId in deleteItem route: ', req.body.punId);
-    console.log(
-      '>>>>> req.body.orderId in deleteItem route: ',
-      req.body.orderId
-    );
     const item = await LineItem.findOne({
       where: {
         punId: req.body.punId,
         orderId: req.body.orderId,
       },
     });
-    console.log('>>>>> item: ', item);
     await item.destroy();
     res.sendStatus(202);
   } catch (error) {
@@ -95,12 +89,15 @@ router.delete('/deleteItem', async (req, res, next) => {
 
 router.put('/editLineItem', async (req, res, next) => {
   try {
-    const { punId, orderId, qty, price } = req.body;
-    await lineItem.update({
-      punId: punId,
-      orderId: orderId,
-      quantity: qty,
-      price: price,
+    const { punId, orderId, quantity } = req.body;
+    const item = await LineItem.findOne({
+      where: {
+        punId: punId,
+        orderId: orderId,
+      },
+    });
+    await item.update({
+      quantity: quantity,
     });
     res.sendStatus(202);
   } catch (error) {

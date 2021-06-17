@@ -78,11 +78,11 @@ export const deleteFromCart = (punId, orderId) => {
   };
 };
 
-export const editItemQty = ({ punId, orderId, qty, price }) => {
+export const editItemQty = (punId, orderId, qty, price) => {
   return async (dispatch) => {
     try {
-      const lineItem = { punId, orderId, qty, price };
-      const res = await axios.put('/api/orders/orderId/', lineItem);
+      const lineItem = { punId: punId, orderId: orderId, quantity: qty };
+      const res = await axios.put('/api/orders/editLineItem', lineItem);
       const updatedLineItem = res.data;
       updatedLineItem['total'] = qty * price;
       dispatch(_editItemQty(updatedLineItem));
