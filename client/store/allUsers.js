@@ -88,6 +88,8 @@ export default function allUsersReducer(users = [], action) {
       return [...users, action.user]
     case REMOVE_USER:
       return users.filter((user) => user.id !== action.user.id)
+    case UPDATE_USER:
+        return users.map((user) => ((user.id === action.user.id) ? (action.user) : (user)))
     default:
       return users
   }

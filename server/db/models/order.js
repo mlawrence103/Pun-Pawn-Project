@@ -30,6 +30,7 @@ const Order = db.define("order", {
   total: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    defaultValue: 0,
     validate: {
       isNumeric: true,
       isInt: true,

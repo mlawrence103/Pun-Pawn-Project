@@ -63,7 +63,7 @@ async function seed() {
     content:
       'To prove he was right, the flat-earther walked to the end of the Earth. He eventually came around.',
     price: 15,
-    quantity: 20,
+    quantity: 20
   });
 
   const pun6 = await Pun.create({
