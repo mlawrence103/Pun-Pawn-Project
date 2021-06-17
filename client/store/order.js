@@ -1,10 +1,5 @@
 import axios from "axios";
-import { ids } from "webpack";
 import history from "../history";
-
-// Fetch order including associated items
-// Added item to cart (add item to global state of order) EDIT may be part of the same ADD action
-// Delete item from cart action
 
 //OPEN order = cart
 //action types
@@ -12,6 +7,7 @@ const SET_CART = "SET_CART";
 const ADD_TO_CART = "ADD_TO_CART";
 const DELETE_FROM_CART = "DELETE_FROM_CART";
 const EDIT_ITEM_QTY = "EDIT_ITEM_QTY";
+const CHECKOUT_CART = "CHECKOUT_CART";
 
 //action creators
 const setCart = (order) => ({
@@ -34,12 +30,17 @@ const _editItemQty = (order) => ({
   order,
 });
 
+const _checkoutCart = (order) => ({
+  type: CHECKOUT_CART,
+  order,
+});
+
 //thunk creators
 export const fetchCart = (userId) => {
   return async (dispatch) => {
     try {
       //may need to change get route from /orders to /users for myCart?
-      const { data: cart } = await axios.get(`/api/orders/myCart/${userId}`);
+      const { data: cart } = await axios.get(`/api/users/${userId}/cart`);
       const action = setCart(cart);
       dispatch(action);
     } catch (error) {
@@ -48,11 +49,24 @@ export const fetchCart = (userId) => {
   };
 };
 
+export const addToCart = ({ punId, orderId, qty, price }) => {
+  return async (dispatch) => {
+    try {
+      const lineItem = { punId, orderId, qty, price };
+      const res = await axios.post("/api/orders/addToCart/", lineItem);
+      const updatedLineItem = res.data;
+      updatedLineItem["total"] = qty * price;
+      dispatch(_addToCart(updatedLineItem));
+    } catch (error) {
+      console.log("Failed to add item to cart", error);
+    }
+  };
+};
+
 export const deleteFromCart = (punId) => {
   return async (dispatch) => {
     try {
-      const { data: pun } = await axios.delete();
-      //need to add delete route --> do we need to create a lineItems router?
+      const { data: pun } = await axios.delete("/api/orders/deleteItem", punId);
       dispatch(_deleteFromCart(pun));
     } catch (error) {
       console.log("Unable to remove item from cart", error);
@@ -70,6 +84,18 @@ export const editItemQty = ({ punId, orderId, qty, price }) => {
       dispatch(_editItemQty(updatedLineItem));
     } catch (error) {
       console.log("Failed to edit cart", error);
+    }
+  };
+};
+
+export const checkoutCart = (order) => {
+  return async (dispatch) => {
+    order.status = "fulfilled";
+    try {
+      const { data } = await axios.put(`/checkout/orderId/${order.id}`, order);
+      dispatch(_checkoutCart(data));
+    } catch (error) {
+      console.log("Unable to process checkout", error);
     }
   };
 };

@@ -4,31 +4,6 @@ const {
 } = require("../db");
 const LineItem = require("../db/models/lineItem");
 
-//get open order by userId
-router.get("/myCart/:userId", async (req, res, next) => {
-  try {
-    //make sure have requireToken
-    const userId = req.params.userId;
-    //add eager loading to include where items' order id matches
-    const order = await Order.findOne({
-      where: { userId: userId, status: "open" },
-      include: [
-        {
-          model: Pun,
-          through: {
-            where: {
-              orderId: orderId,
-            },
-          },
-        },
-      ],
-    });
-    res.json(order);
-  } catch (err) {
-    next(err);
-  }
-});
-
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
 router.get("/orderId/:orderId", async (req, res, next) => {
@@ -81,26 +56,64 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-//edit an order
-//add/edit/delete items
-router.put("/addToCart", async (req, res, next) => {
+//**OPEN ORDER ROUTES */
+
+router.post("/addToCart", async (req, res, next) => {
   try {
-    await lineItem.create({
-      punId: req.body.punId,
-      orderId: req.body.orderId,
-      quantity: req.body.qty,
-      price: req.body.price,
+    const { punId, orderId, qty, price } = req.body;
+    await lineItem.create({ punId, orderId, qty, price });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/deleteItem", async (req, res, next) => {
+  try {
+    const item = LineItem.findByPk(req.body.punId);
+    await lineItem.delete(item);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/editLineItem", async (req, res, next) => {
+  try {
+    const { punId, orderId, qty, price } = req.body;
+    await lineItem.update({
+      punId,
+      orderId,
+      qty,
+      price,
     });
   } catch (error) {
     next(error);
   }
 });
 
-//checkout edit status
-router.put("/orderId/:orderId", async (req, res, next) => {
+//checkout edit order status
+router.put("/checkout/orderId/:orderId", async (req, res, next) => {
   try {
+    const {
+      status,
+      emailAddress,
+      shippingAddressName,
+      shippingAddressStreet,
+      shippingAddressCity,
+      shippingAddressState,
+      shippingAddressZip,
+      total,
+    } = req.body;
     const order = await Order.findByPk(req.params.orderId);
-    await order.update(req.body);
+    await order.update({
+      status,
+      emailAddress,
+      shippingAddressName,
+      shippingAddressStreet,
+      shippingAddressCity,
+      shippingAddressState,
+      shippingAddressZip,
+      total,
+    });
     res.json(order);
   } catch (error) {
     next(error);
