@@ -60,7 +60,13 @@ router.post('/', async (req, res, next) => {
 router.post('/addToCart', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
-    await lineItem.create({ punId, orderId, qty, price });
+    const lineItem = await LineItem.create({
+      quantity: qty,
+      price: price,
+      orderId: orderId,
+      punId: punId,
+    });
+    res.status(201).json(lineItem);
   } catch (error) {
     next(error);
   }
@@ -70,6 +76,7 @@ router.delete('/deleteItem', async (req, res, next) => {
   try {
     const item = LineItem.findByPk(req.body.punId);
     await lineItem.delete(item);
+    res.sendStatus(202);
   } catch (error) {
     next(error);
   }
@@ -84,6 +91,7 @@ router.put('/editLineItem', async (req, res, next) => {
       qty,
       price,
     });
+    res.sendStatus(202);
   } catch (error) {
     next(error);
   }
