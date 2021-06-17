@@ -66,7 +66,7 @@ export default function punsReducer(state = [], action) {
     case GOT_PUNS_FROM_SERVER:
       return action.puns;
     case CREATE_PUN:
-      return action.pun;
+      return [...state, action.pun];
     case DELETE_PUN:
       return state.filter((pun) => pun.id !== action.pun.id);
     default:
