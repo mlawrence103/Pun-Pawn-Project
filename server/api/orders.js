@@ -1,12 +1,11 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   models: { Order, Pun, LineItem },
-} = require("../db");
-const LineItem = require("../db/models/lineItem");
+} = require('../db');
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
-router.get("/orderId/:orderId", async (req, res, next) => {
+router.get('/orderId/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
     //add eager loading to include where items' order id matches
@@ -29,7 +28,7 @@ router.get("/orderId/:orderId", async (req, res, next) => {
 });
 
 //create new order
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
     const {
@@ -58,40 +57,56 @@ router.post("/", async (req, res, next) => {
 
 //**OPEN ORDER ROUTES */
 
-router.post("/addToCart", async (req, res, next) => {
+router.post('/addToCart', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
-    await lineItem.create({ punId, orderId, qty, price });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/deleteItem", async (req, res, next) => {
-  try {
-    const item = LineItem.findByPk(req.body.punId);
-    await lineItem.delete(item);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/editLineItem", async (req, res, next) => {
-  try {
-    const { punId, orderId, qty, price } = req.body;
-    await lineItem.update({
-      punId,
-      orderId,
-      qty,
-      price,
+    const lineItem = await LineItem.create({
+      quantity: qty,
+      price: price,
+      orderId: orderId,
+      punId: punId,
     });
+    res.status(201).json(lineItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/deleteItem', async (req, res, next) => {
+  try {
+    const item = await LineItem.findOne({
+      where: {
+        punId: req.body.punId,
+        orderId: req.body.orderId,
+      },
+    });
+    await item.destroy();
+    res.sendStatus(202);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/editLineItem', async (req, res, next) => {
+  try {
+    const { punId, orderId, quantity } = req.body;
+    const item = await LineItem.findOne({
+      where: {
+        punId: punId,
+        orderId: orderId,
+      },
+    });
+    await item.update({
+      quantity: quantity,
+    });
+    res.sendStatus(202);
   } catch (error) {
     next(error);
   }
 });
 
 //checkout edit order status
-router.put("/checkout/orderId/:orderId", async (req, res, next) => {
+router.put('/checkout/orderId/:orderId', async (req, res, next) => {
   try {
     const {
       status,

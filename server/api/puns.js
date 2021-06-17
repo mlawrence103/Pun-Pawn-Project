@@ -43,7 +43,7 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const pun = await Pun.findByPk(req.params.id);
-    await pun.destroy;
+    await pun.destroy();
     res.json(pun);
   } catch (error) {
     next(error);
