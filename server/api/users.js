@@ -3,7 +3,11 @@ const {
   models: { User },
 } = require('../db');
 module.exports = router;
-const { requireToken, isAdmin } = require('./gatekeepingMiddleware');
+const {
+  requireToken,
+  isAdmin,
+  adminOrSelf,
+} = require('./gatekeepingMiddleware');
 
 //for a single user to find their own info/admin to access single user info
 // attach requireToken
@@ -74,7 +78,7 @@ router.post('/', isAdmin, async (req, res, next) => {
 //user should be able to update own profile
 //admine should be able to edit any profile
 //destructure req.body
-router.put('/:id', isAdmin, async (req, res, next) => {
+router.put('/:id', adminOrSelf, async (req, res, next) => {
   try {
     const {
       firstName,
