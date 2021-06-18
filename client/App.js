@@ -2,12 +2,14 @@ import React from 'react'
 
 import Navbar from './components/Navbar'
 import Routes from './Routes'
+import AllPuns from './components/AllPuns'
 
 const App = () => {
   return (
     <div>
       <Navbar />
       <Routes />
+      <AllPuns />
     </div>
   )
 }
