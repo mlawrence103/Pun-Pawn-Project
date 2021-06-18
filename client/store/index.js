@@ -16,7 +16,8 @@ const reducer = combineReducers({
   singlePun: singlePunReducer,
   singleUser: singleUserReducer,
   allUsers: allUsersReducer, 
-  orders: orderReducer,  })
+  orders: orderReducer,  
+})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )
