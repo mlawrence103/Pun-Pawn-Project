@@ -63,7 +63,7 @@ async function seed() {
     content:
       'To prove he was right, the flat-earther walked to the end of the Earth. He eventually came around.',
     price: 15,
-    quantity: 20
+    quantity: 20,
   });
 
   const pun6 = await Pun.create({
@@ -71,6 +71,12 @@ async function seed() {
       'What did the cell say when his sister cell stepped on his foot? Mitosis.',
     price: 100,
     quantity: 7,
+  });
+
+  const pun7 = await Pun.create({
+    content: 'Accupuncture is a jab well done.',
+    price: 350,
+    quantity: 3,
   });
 
   const order1 = await Order.create({

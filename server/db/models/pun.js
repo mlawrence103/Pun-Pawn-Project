@@ -37,7 +37,7 @@ const Pun = db.define('pun', {
 //1. instance method or 2. hook or 3. getters and setters or 4. virtual methods to set price using pennies
 
 //convert price to dollars from pennies
-Pun.beforeSave((pun) => {
-  pun.price = pun.price / 100;
-});
+Pun.prototype.convertFromPennies = function () {
+  return this.price / 100;
+};
 module.exports = Pun;
