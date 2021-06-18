@@ -31,6 +31,14 @@ async function seed() {
     userType: 'ADMIN',
   });
 
+  const user2 = await User.create({
+    firstName: 'Cody',
+    lastName: 'Pug',
+    email: 'iluvCofee@pugs.com',
+    password: '321',
+    userType: 'MEMBER',
+  });
+
   const pun1 = await Pun.create({
     content: 'pretty fly for a wifi',
     author: 'Ben Rodriguez',
@@ -63,7 +71,7 @@ async function seed() {
     content:
       'To prove he was right, the flat-earther walked to the end of the Earth. He eventually came around.',
     price: 15,
-    quantity: 20
+    quantity: 20,
   });
 
   const pun6 = await Pun.create({
@@ -71,6 +79,12 @@ async function seed() {
       'What did the cell say when his sister cell stepped on his foot? Mitosis.',
     price: 100,
     quantity: 7,
+  });
+
+  const pun7 = await Pun.create({
+    content: 'Accupuncture is a jab well done.',
+    price: 350,
+    quantity: 3,
   });
 
   const order1 = await Order.create({
@@ -83,7 +97,13 @@ async function seed() {
     shippingAddressZip: '10036',
   });
 
+  const order2 = await Order.create({
+    status: 'open',
+  });
+
   await order1.addPun(pun1);
+  await order2.addPuns([pun2, pun3, pun4]);
+  await user1.addOrder(order2);
 }
 
 /*
