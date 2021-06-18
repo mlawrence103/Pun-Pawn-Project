@@ -12,7 +12,7 @@ class AllPuns extends React.Component {
       <div>
         <ul className="listAll">
             {this.props.allPuns.map((pun) => (
-                <li>
+                <li key={pun.id} >
                     <h1>Pun: {pun.content}</h1>
                 </li>))
             }
