@@ -31,6 +31,14 @@ async function seed() {
     userType: 'ADMIN',
   });
 
+  const user2 = await User.create({
+    firstName: 'Cody',
+    lastName: 'Pug',
+    email: 'iluvCofee@pugs.com',
+    password: '321',
+    userType: 'MEMBER',
+  });
+
   const pun1 = await Pun.create({
     content: 'pretty fly for a wifi',
     author: 'Ben Rodriguez',
@@ -89,7 +97,13 @@ async function seed() {
     shippingAddressZip: '10036',
   });
 
+  const order2 = await Order.create({
+    status: 'open',
+  });
+
   await order1.addPun(pun1);
+  await order2.addPuns([pun2, pun3, pun4]);
+  await user1.addOrder(order2);
 }
 
 /*

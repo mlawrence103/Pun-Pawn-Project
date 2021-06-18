@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  models: { Order, Pun, LineItem },
+  models: { Order, Pun, LineItem, User },
 } = require('../db');
 
 //get order by orderId (useful for guests)
@@ -40,15 +40,47 @@ router.post('/', async (req, res, next) => {
       shippingAddressState,
       shippingAddressZip,
     } = req.body;
-    const order = await Order.create({
-      status,
-      emailAddress,
-      shippingAddressName,
-      shippingAddressStreet,
-      shippingAddressCity,
-      shippingAddressState,
-      shippingAddressZip,
-    }); //destructured
+    let order;
+    //if there's a user associated with this order, include it in the new order instance
+    if (req.body.userId) {
+      const { userId } = req.body;
+      const userWithOpenOrder = await User.findByPk(userId, {
+        include: [
+          {
+            model: Order,
+            where: {
+              status: 'open',
+            },
+          },
+        ],
+      });
+      //if user already has an open order, do not create new order
+      if (userWithOpenOrder) {
+        //is this the proper way to reference this?
+        throw new Error('You cannot create more than one open order per user.');
+      }
+      order = await Order.create({
+        status,
+        emailAddress,
+        shippingAddressName,
+        shippingAddressStreet,
+        shippingAddressCity,
+        shippingAddressState,
+        shippingAddressZip,
+        userId,
+      }); //destructured
+    } else {
+      //if guest cart, create new order without userId
+      order = await Order.create({
+        status,
+        emailAddress,
+        shippingAddressName,
+        shippingAddressStreet,
+        shippingAddressCity,
+        shippingAddressState,
+        shippingAddressZip,
+      }); //destructured
+    }
     res.status(201).json(order);
   } catch (error) {
     next(error);
