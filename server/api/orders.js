@@ -54,9 +54,11 @@ router.post('/', async (req, res, next) => {
           },
         ],
       });
+      console.log('>>>>> userWithOpenOrder: ', userWithOpenOrder);
       //if user already has an open order, do not create new order
-      if (userWithOpenOrder.order) {
+      if (userWithOpenOrder) {
         //is this the proper way to reference this?
+        console.log('USER ALREADY HAS OPEN ORDER');
         throw new Error('You cannot create more than one open order per user.');
       }
       order = await Order.create({

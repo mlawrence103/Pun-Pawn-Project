@@ -31,6 +31,14 @@ async function seed() {
     userType: 'ADMIN',
   });
 
+  const user2 = await User.create({
+    firstName: 'Cody',
+    lastName: 'Pug',
+    email: 'iluvCofee@pugs.com',
+    password: '321',
+    userType: 'MEMBER',
+  });
+
   const pun1 = await Pun.create({
     content: 'pretty fly for a wifi',
     author: 'Ben Rodriguez',
