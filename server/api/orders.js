@@ -133,10 +133,9 @@ router.put("/:orderId/checkout", async (req, res, next) => {
 
 router.put("/:orderId/submit", async (req, res, next) => {
   try {
-    const { status } = req.body;
     const order = await Order.findByPk(req.params.orderId);
     await order.update({
-      status,
+      status: "fulfilled",
     });
     res.json(order);
   } catch (error) {

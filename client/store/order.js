@@ -113,7 +113,6 @@ export const checkoutCart = (order) => {
 //final submission of cart; update only status
 export const submitOrder = (order) => {
   return async (dispatch) => {
-    order.status = "fulfilled";
     try {
       const { data } = await axios.put(`/${order.id}/submit`, order);
       dispatch(_submitOrder(data));
