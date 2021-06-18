@@ -1,7 +1,7 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
+const Sequelize = require('sequelize');
+const db = require('../db');
 
-const Pun = db.define("pun", {
+const Pun = db.define('pun', {
   content: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -11,7 +11,7 @@ const Pun = db.define("pun", {
   },
   author: {
     type: Sequelize.STRING,
-    defaultValue: "anonymous",
+    defaultValue: 'anonymous',
   },
   price: {
     type: Sequelize.INTEGER,
@@ -35,4 +35,9 @@ const Pun = db.define("pun", {
 });
 
 //1. instance method or 2. hook or 3. getters and setters or 4. virtual methods to set price using pennies
+
+//convert price to dollars from pennies
+Pun.prototype.convertFromPennies = function () {
+  return this.price / 100;
+};
 module.exports = Pun;
