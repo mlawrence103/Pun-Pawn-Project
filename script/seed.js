@@ -89,7 +89,13 @@ async function seed() {
     shippingAddressZip: '10036',
   });
 
+  const order2 = await Order.create({
+    status: 'open',
+  });
+
   await order1.addPun(pun1);
+  await order2.addPuns([pun2, pun3, pun4]);
+  await user1.addOrder(order2);
 }
 
 /*
