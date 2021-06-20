@@ -30,6 +30,7 @@ router.get("/me", async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization, {
       attributes: { exclude: ["password"] },
+      // need to check this again; password is NOT excluded
     });
     res.send(user);
   } catch (ex) {
