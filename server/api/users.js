@@ -9,6 +9,18 @@ const {
   adminOrSelf,
 } = require("./gatekeepingMiddleware");
 
+//get user info for admin (attach requireToken and isAdmin to check for auth)
+router.get("/admin", requireToken, isAdmin, async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ["password"] },
+    });
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
 //for a single user to find their own info/admin to access single user info
 // attach requireToken
 router.get("/:id", adminOrSelf, async (req, res, next) => {
@@ -37,19 +49,6 @@ router.get("/:id/cart", async (req, res, next) => {
       ],
     });
     res.json(order);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-//get user info for admin (attach requireToken and isAdmin to check for auth)
-router.get("/admin", requireToken, isAdmin, async (req, res, next) => {
-  try {
-    const users = await User.findAll({
-      attributes: { exclude: ["password"] },
-    });
-    res.json(users);
   } catch (err) {
     next(err);
   }
