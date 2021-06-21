@@ -4,6 +4,7 @@ import history from '../history';
 //OPEN order = cart
 //action types
 const SET_CART = 'SET_CART';
+const CREATE_CART = 'CREATE_CART';
 const ADD_TO_CART = 'ADD_TO_CART';
 const DELETE_FROM_CART = 'DELETE_FROM_CART';
 const EDIT_ITEM_QTY = 'EDIT_ITEM_QTY';
@@ -16,9 +17,15 @@ const setCart = (order) => ({
   order,
 });
 
+//create new order route takes in: status, email, and shipping info, but only the status is required
+const _createCart = (order) => ({
+  type: CREATE_CART,
+  order,
+});
+
 const _addToCart = (order) => ({
   type: ADD_TO_CART,
-  order,
+  newOrder,
 });
 
 const _deleteFromCart = (order) => ({
@@ -42,15 +49,56 @@ const _submitOrder = (order) => ({
 });
 
 //thunk creators
-export const fetchCart = (userId) => {
+
+//if there is no passed in userId or orderId, then create a new cart
+export const fetchCart = (userId = null, orderId = null) => {
   return async (dispatch) => {
     try {
-      //may need to change get route from /orders to /users for myCart?
-      const { data: cart } = await axios.get(`/api/users/${userId}/cart`);
+      let cart = {};
+      if (userId) {
+        cart = await axios.get(`/api/users/${user.id}/cart`).data;
+        //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
+        if (!cart) {
+          const {
+            emailAddress,
+            shippingAddressName,
+            shippingAddressStreet,
+            shippingAddressCity,
+            shippingAddressState,
+            shippingAddressZip,
+            userId,
+          } = user.createCart({
+            emailAddress,
+            shippingAddressName,
+            shippingAddressStreet,
+            shippingAddressCity,
+            shippingAddressState,
+            shippingAddressZip,
+            userId,
+          });
+        }
+      } else if (orderId) {
+        cart = await axios.get(`/api/orders/${orderId}`).data;
+      } else {
+        //else if there is no userId or orderId
+        createCart();
+      }
       const action = setCart(cart);
       dispatch(action);
     } catch (error) {
       console.log('Cannot find cart', error);
+    }
+  };
+};
+
+export const createCart = (userInfo) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post('api/orders/', userInfo);
+      const newOrder = res.data;
+      dispatch(_createCart(newOrder));
+    } catch (error) {
+      console.log('Failed to create a new order', error);
     }
   };
 };
@@ -128,6 +176,8 @@ const initialState = { userId: null, total: 0, items: [] };
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CART:
+      return action.order;
+    case CREATE_CART:
       return action.order;
     case ADD_TO_CART:
       return action.order;
