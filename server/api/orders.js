@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {
   models: { Order, Pun, LineItem, User },
-} = require('../db');
+} = require("../db");
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
@@ -40,6 +40,7 @@ router.post('/', async (req, res, next) => {
       shippingAddressState,
       shippingAddressZip,
     } = req.body;
+
     let order;
     //if there's a user associated with this order, include it in the new order instance
     if (req.body.userId) {
@@ -49,7 +50,7 @@ router.post('/', async (req, res, next) => {
           {
             model: Order,
             where: {
-              status: 'open',
+              status: "open",
             },
           },
         ],
@@ -57,7 +58,7 @@ router.post('/', async (req, res, next) => {
       //if user already has an open order, do not create new order
       if (userWithOpenOrder) {
         //is this the proper way to reference this?
-        throw new Error('You cannot create more than one open order per user.');
+        throw new Error("You cannot create more than one open order per user.");
       }
       order = await Order.create({
         status,

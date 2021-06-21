@@ -1,6 +1,6 @@
 const {
   models: { User },
-} = require('../db');
+} = require("../db");
 
 //store all of our functions that will act as middleware between our request and our response and we will use it as we see fit
 
@@ -10,20 +10,27 @@ const requireToken = async (req, res, next) => {
     const user = await User.findByToken(token);
     req.user = user;
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
 //if we get past require token, we can guarantee that we have a user, but we want to check if user has admin permissions
-const isAdmin = (req, res, next) => {
-  if (req.user.userType !== 'ADMIN') {
-    return res
-      .status(403)
-      .send('You are not authorized to access this information!');
-  } else {
-    // if the user is an admin, pass them forward
-    next();
+const isAdmin = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    const user = await User.findByToken(token);
+    req.user = user;
+    if (req.user.userType !== "ADMIN") {
+      return res
+        .status(403)
+        .send("You are not authorized to access this information!");
+    } else {
+      // if the user is an admin, pass them forward
+      next();
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -33,13 +40,15 @@ const adminOrSelf = async (req, res, next) => {
     const token = req.headers.authorization;
     const user = await User.findByToken(token);
     req.user = user;
-    //if user doesn't exist, it's because couldn't retrieve by token
-    if (user || req.user.userType !== 'ADMIN') {
-      return res
-        .status(403)
-        .send(
-          'You are not authorized to access this information because you are not the relevant user or an administrator'
-        );
+    //found flaw in previous conditional as it was not checking if the found user from token has the same id as the params and it was not passing even if the user matched because they may not be an admin
+    if (req.user.userType !== "ADMIN") {
+      if (user.id !== Number(req.params.id)) {
+        return res
+          .status(403)
+          .send(
+            "You are not authorized to access this information because you are not the relevant user or an administrator"
+          );
+      }
     }
     next();
   } catch (error) {
