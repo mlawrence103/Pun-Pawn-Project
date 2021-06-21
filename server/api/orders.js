@@ -1,11 +1,11 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   models: { Order, Pun, LineItem, User },
 } = require("../db");
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
-router.get("/:orderId", async (req, res, next) => {
+router.get('/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
     //add eager loading to include where items' order id matches
@@ -28,7 +28,7 @@ router.get("/:orderId", async (req, res, next) => {
 });
 
 //create new order
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
     const {
@@ -90,7 +90,7 @@ router.post("/", async (req, res, next) => {
 
 //**OPEN ORDER ROUTES */
 
-router.post("/addToCart", async (req, res, next) => {
+router.post('/addToCart', async (req, res, next) => {
   try {
     const { punId, orderId, qty, price } = req.body;
     const lineItem = await LineItem.create({
@@ -105,7 +105,7 @@ router.post("/addToCart", async (req, res, next) => {
   }
 });
 
-router.delete("/deleteItem", async (req, res, next) => {
+router.delete('/deleteItem', async (req, res, next) => {
   try {
     const item = await LineItem.findOne({
       where: {
@@ -120,7 +120,7 @@ router.delete("/deleteItem", async (req, res, next) => {
   }
 });
 
-router.put("/editLineItem", async (req, res, next) => {
+router.put('/editLineItem', async (req, res, next) => {
   try {
     const { punId, orderId, quantity } = req.body;
     const item = await LineItem.findOne({
@@ -138,7 +138,7 @@ router.put("/editLineItem", async (req, res, next) => {
   }
 });
 
-router.put("/:orderId/checkout", async (req, res, next) => {
+router.put('/:orderId/checkout', async (req, res, next) => {
   try {
     const {
       emailAddress,
@@ -163,11 +163,11 @@ router.put("/:orderId/checkout", async (req, res, next) => {
   }
 });
 
-router.put("/:orderId/submit", async (req, res, next) => {
+router.put('/:orderId/submit', async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.orderId);
     await order.update({
-      status: "fulfilled",
+      status: 'fulfilled',
     });
     res.json(order);
   } catch (error) {
