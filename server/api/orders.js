@@ -30,6 +30,7 @@ router.get('/:orderId', async (req, res, next) => {
 
 //create new order
 router.post('/', async (req, res, next) => {
+  console.log('HERE IN NEW ORDER POST ROUTE');
   try {
     //make sure getting proper order instance from store
     const {
