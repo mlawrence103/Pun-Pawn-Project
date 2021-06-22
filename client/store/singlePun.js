@@ -20,7 +20,7 @@ export const _updatePun = (pun) => ({
 export const fetchSinglePun = (id) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(`api/puns/${id}`);
+      const res = await axios.get(`/api/puns/${id}`);
       const pun = res.data;
       dispatch(gotSinglePun(pun));
     } catch (error) {
@@ -32,7 +32,7 @@ export const fetchSinglePun = (id) => {
 export const updatePun = (pun, history) => {
   return async (dispatch) => {
     try {
-      const res = await axios.put(`api/puns/${pun.id}`, pun);
+      const res = await axios.put(`/api/puns/${pun.id}`, pun);
       const updatedPun = res.data;
       dispatch(_updatePun(updatedPun));
       history.push(`/puns/${pun.id}`);
