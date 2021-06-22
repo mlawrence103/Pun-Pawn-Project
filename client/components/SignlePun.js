@@ -32,7 +32,7 @@ class SinglePun extends React.Component {
       window.localStorage.setItem("currentOrderId", JSON.stringify(this.props.order.orderId));
     }
     const orderId = this.props.order.orderId;
-    await this.props.addToCart(pun.id, orderId, 1, pun.price);
+    await this.props.addToCart(pun.id, orderId, this.state.quantity, pun.price);
     console.log("this.props.order: ", this.props.order);
   }
 
