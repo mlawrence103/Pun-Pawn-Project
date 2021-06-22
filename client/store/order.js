@@ -92,7 +92,9 @@ export const fetchCart = (user = null, orderId = null) => {
           "NO userid or orderid in fetch order reducer -> create new cart "
         );
         //else if there is no userId or orderId
-        cart = await createCart();
+        const create = createCart();
+        cart = await create(dispatch);
+        console.log(cart, "guest cart in fetch order thunk");
       }
       const action = setCart(cart);
       dispatch(action);
@@ -102,13 +104,23 @@ export const fetchCart = (user = null, orderId = null) => {
   };
 };
 
-export const createCart = (userInfo) => {
-  console.log("HERE in create cart thunk");
+export const createCart = (
+  userInfo = {
+    emailAddress: null,
+    shippingAddressName: null,
+    shippingAddressStreet: null,
+    shippingAddressCity: null,
+    shippingAddressState: null,
+    shippingAddressZip: null,
+  }
+) => {
+  console.log("userInfo in create thunk: ", userInfo);
   return async (dispatch) => {
     try {
+      console.log("HERE in create cart thunk");
       const res = await axios.post("/api/orders/", userInfo);
       const order = res.data;
-      dispatch(_createCart(order));
+      return dispatch(_createCart(order));
     } catch (error) {
       console.log("Failed to create a new order", error);
     }
