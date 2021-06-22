@@ -66,23 +66,24 @@ export const fetchCart = (user = null, orderId = null) => {
         //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
         if (!cart) {
           const {
-            emailAddress,
+            email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            id,
           } = user;
-          cart = await createCart({
-            emailAddress,
+          const create = createCart({
+            emailAddress: email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            userId: id,
           });
+          cart = await create(dispatch);
         }
       } else if (orderId) {
         console.log('type of order id: ', typeof orderId);
@@ -116,6 +117,7 @@ export const createCart = (
     shippingAddressCity: null,
     shippingAddressState: null,
     shippingAddressZip: null,
+    userId: null,
   }
 ) => {
   console.log('userInfo in create thunk: ', userInfo);
