@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { db } = require('../server/db');
+const { db } = require("../server/db");
 const {
   models: { Order, User, Pun },
-} = require('../server/db');
+} = require("../server/db");
 
 /**
  * seed - this function clears the database, updates tables to
@@ -11,37 +11,37 @@ const {
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log('db synced!');
+  console.log("db synced!");
 
   const user1 = await User.create({
-    firstName: 'Brenda',
-    lastName: 'Wong',
-    email: 'brenda.wong@gmail.com',
-    password: '123',
-    shippingAddressName: 'Brenda Wong',
-    shippingAddressStreet: '123 Sesame St.',
-    shippingAddressCity: 'New York City',
-    shippingAddressState: 'NY',
-    shippingAddressZip: '10036',
-    billingAddressName: 'Brenda Wong',
-    billingAddressStreet: '123 Sesame St.',
-    billingAddressCity: 'New York City',
-    billingAddressState: 'NY',
-    billingAddressZip: '10036',
-    userType: 'ADMIN',
+    firstName: "Brenda",
+    lastName: "Wong",
+    email: "brenda.wong@gmail.com",
+    password: "123",
+    shippingAddressName: "Brenda Wong",
+    shippingAddressStreet: "123 Sesame St.",
+    shippingAddressCity: "New York City",
+    shippingAddressState: "NY",
+    shippingAddressZip: "10036",
+    billingAddressName: "Brenda Wong",
+    billingAddressStreet: "123 Sesame St.",
+    billingAddressCity: "New York City",
+    billingAddressState: "NY",
+    billingAddressZip: "10036",
+    userType: "ADMIN",
   });
 
   const user2 = await User.create({
-    firstName: 'Cody',
-    lastName: 'Pug',
-    email: 'iluvCofee@pugs.com',
-    password: '321',
-    userType: 'MEMBER',
+    firstName: "Cody",
+    lastName: "Pug",
+    email: "iluvCoffee@pugs.com",
+    password: "321",
+    userType: "MEMBER",
   });
 
   const pun1 = await Pun.create({
-    content: 'pretty fly for a wifi',
-    author: 'Ben Rodriguez',
+    content: "pretty fly for a wifi",
+    author: "Ben Rodriguez",
     price: 25,
     quantity: 3,
   });
@@ -49,7 +49,7 @@ async function seed() {
   const pun2 = await Pun.create({
     content:
       "You're going to await awhile for the seed data as I've used all my seeds to plant trees.",
-    author: 'Ben Rodriguez',
+    author: "Ben Rodriguez",
     price: 500,
     quantity: 1,
   });
@@ -62,48 +62,49 @@ async function seed() {
 
   const pun4 = await Pun.create({
     content:
-      'The past, the present and the future walk into a bar. It was tense.',
+      "The past, the present and the future walk into a bar. It was tense.",
     price: 5,
     quantity: 50,
   });
 
   const pun5 = await Pun.create({
     content:
-      'To prove he was right, the flat-earther walked to the end of the Earth. He eventually came around.',
+      "To prove he was right, the flat-earther walked to the end of the Earth. He eventually came around.",
     price: 15,
     quantity: 20,
   });
 
   const pun6 = await Pun.create({
     content:
-      'What did the cell say when his sister cell stepped on his foot? Mitosis.',
+      "What did the cell say when his sister cell stepped on his foot? Mitosis.",
     price: 100,
     quantity: 7,
   });
 
   const pun7 = await Pun.create({
-    content: 'Accupuncture is a jab well done.',
+    content: "Accupuncture is a jab well done.",
     price: 350,
     quantity: 3,
   });
 
   const order1 = await Order.create({
-    status: 'open',
-    emailAddress: 'brenda.wong@gmail.com',
-    shippingAddressName: 'Brenda Wong',
-    shippingAddressStreet: '123 Sesame St.',
-    shippingAddressCity: 'New York City',
-    shippingAddressState: 'NY',
-    shippingAddressZip: '10036',
+    status: "open",
+    emailAddress: "brenda.wong@gmail.com",
+    shippingAddressName: "Brenda Wong",
+    shippingAddressStreet: "123 Sesame St.",
+    shippingAddressCity: "New York City",
+    shippingAddressState: "NY",
+    shippingAddressZip: "10036",
   });
 
   const order2 = await Order.create({
-    status: 'open',
+    status: "open",
   });
 
   await order1.addPun(pun1);
   await order2.addPuns([pun2, pun3, pun4]);
-  await user1.addOrder(order2);
+  await user1.addOrder(order1);
+  await user2.addOrder(order2);
 }
 
 /*
@@ -112,16 +113,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...');
+  console.log("seeding...");
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log('closing db connection');
+    console.log("closing db connection");
     await db.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
   }
 }
 
