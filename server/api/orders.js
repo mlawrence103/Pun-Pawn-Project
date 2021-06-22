@@ -22,6 +22,7 @@ router.get('/:orderId', async (req, res, next) => {
         },
       ],
     });
+    console.log('!!!!!!******order in get by orderId route: ', order);
     res.json(order);
   } catch (error) {
     next(error);
@@ -30,7 +31,7 @@ router.get('/:orderId', async (req, res, next) => {
 
 //create new order
 router.post('/', async (req, res, next) => {
-  console.log('HERE IN NEW ORDER POST ROUTE');
+  console.log('>>>>>>>>>>>>>>>>>>>>HERE IN NEW ORDER POST ROUTE');
   try {
     //make sure getting proper order instance from store
     const {
@@ -92,6 +93,7 @@ router.post('/', async (req, res, next) => {
 //**OPEN ORDER ROUTES */
 
 router.post('/addToCart', async (req, res, next) => {
+  console.log('reached add to cart API route');
   try {
     const { punId, orderId, qty, price } = req.body;
     const lineItem = await LineItem.create({

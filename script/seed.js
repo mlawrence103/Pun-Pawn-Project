@@ -34,7 +34,15 @@ async function seed() {
   const user2 = await User.create({
     firstName: 'Cody',
     lastName: 'Pug',
-    email: 'iluvCofee@pugs.com',
+    email: 'iluvCoffee@pugs.com',
+    password: '321',
+    userType: 'MEMBER',
+  });
+
+  const user3 = await User.create({
+    firstName: 'Luke',
+    lastName: 'Skywalker',
+    email: 'blueSaber@jedi.com',
     password: '321',
     userType: 'MEMBER',
   });
@@ -103,7 +111,8 @@ async function seed() {
 
   await order1.addPun(pun1);
   await order2.addPuns([pun2, pun3, pun4]);
-  await user1.addOrder(order2);
+  await user1.addOrder(order1);
+  await user2.addOrder(order2);
 }
 
 /*

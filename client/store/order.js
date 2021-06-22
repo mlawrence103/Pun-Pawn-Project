@@ -12,10 +12,13 @@ const CHECKOUT_CART = 'CHECKOUT_CART';
 const SUBMIT_ORDER = 'SUBMIT_ORDER';
 
 //action creators
-const setCart = (order) => ({
-  type: SET_CART,
-  order,
-});
+const setCart = (order) => {
+  console.log('order in setCart action: ', order);
+  return {
+    type: SET_CART,
+    order,
+  };
+};
 
 //create new order route takes in: status, email, and shipping info, but only the status is required
 const _createCart = (order) => ({
@@ -25,7 +28,7 @@ const _createCart = (order) => ({
 
 const _addToCart = (order) => ({
   type: ADD_TO_CART,
-  newOrder,
+  order,
 });
 
 const _deleteFromCart = (order) => ({
@@ -58,38 +61,45 @@ export const fetchCart = (user = null, orderId = null) => {
       if (user) {
         console.log('LOGGED IN user in fetch order reducer: ', user);
         const res = await axios.get(`/api/users/${user.id}/cart`);
-        const cart = res.data;
+        cart = res.data;
         console.log('USER CART in fetch order reducer: ', cart);
         //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
         if (!cart) {
           const {
-            emailAddress,
+            email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            id,
           } = user;
-          createCart({
-            emailAddress,
+          const create = createCart({
+            emailAddress: email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            userId: id,
           });
+          cart = await create(dispatch);
         }
       } else if (orderId) {
+        console.log('type of order id: ', typeof orderId);
         console.log('ORDER ID in fetch order reducer: ', orderId);
-        cart = await axios.get(`/api/orders/${orderId}`).data;
+        const { data } = await axios.get(`/api/orders/${orderId}`);
+        console.log('data returned from get by orderId req: ', data);
+        cart = data;
+        console.log('GUEST CART with open order: ', cart);
       } else {
         console.log(
           'NO userid or orderid in fetch order reducer -> create new cart '
         );
         //else if there is no userId or orderId
-        cart = createCart();
+        const create = createCart();
+        cart = await create(dispatch);
+        console.log(cart, 'guest cart in fetch order thunk');
       }
       const action = setCart(cart);
       dispatch(action);
@@ -99,13 +109,25 @@ export const fetchCart = (user = null, orderId = null) => {
   };
 };
 
-export const createCart = (userInfo) => {
-  console.log('HERE in create cart thunk');
+export const createCart = (
+  userInfo = {
+    emailAddress: null,
+    shippingAddressName: null,
+    shippingAddressStreet: null,
+    shippingAddressCity: null,
+    shippingAddressState: null,
+    shippingAddressZip: null,
+    userId: null,
+  }
+) => {
+  console.log('userInfo in create thunk: ', userInfo);
   return async (dispatch) => {
     try {
-      const res = await axios.post('api/orders/', userInfo);
-      const newOrder = res.data;
-      dispatch(_createCart(newOrder));
+      console.log('HERE in create cart thunk');
+      const res = await axios.post('/api/orders/', userInfo);
+      const order = res.data;
+      dispatch(_createCart(order));
+      return order;
     } catch (error) {
       console.log('Failed to create a new order', error);
     }
@@ -113,13 +135,16 @@ export const createCart = (userInfo) => {
 };
 
 export const addToCart = (punId, orderId, qty, price) => {
+  console.log('HERE in add to cart thunk');
+  console.log('arguments: ', punId, orderId, qty, price);
   return async (dispatch) => {
     try {
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
       const lineItem = { punId, orderId, qty, price };
-      const res = await axios.post('/api/orders/addToCart/', lineItem);
+      console.log(lineItem, 'line item in add to cart');
+      const res = await axios.post('/api/orders/addToCart', lineItem);
       const updatedLineItem = res.data;
       updatedLineItem['total'] = qty * price;
       dispatch(_addToCart(updatedLineItem));
@@ -183,15 +208,17 @@ export const submitOrder = (order) => {
 };
 
 //initial state
-const initialState = { userId: null, total: 0, items: [] };
+const initialState = { userId: null, total: 0, items: [], orderId: null };
 
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CART:
       return action.order;
     case CREATE_CART:
+      console.log('in create cart reducer');
       return action.order;
     case ADD_TO_CART:
+      console.log('in add to cart reducer');
       return action.order;
     case DELETE_FROM_CART:
       return action.order;

@@ -29,7 +29,9 @@ class AllPuns extends React.Component {
     //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
     else {
       console.log('GUEST in add item to cart event handler');
-      const currentGuestOrderId = window.localStorage.getItem('currentOrderId');
+      const currentGuestOrderId = parseInt(
+        window.localStorage.getItem('currentOrderId')
+      );
       console.log(
         'current guest order id from local storage: ',
         currentGuestOrderId
@@ -38,13 +40,26 @@ class AllPuns extends React.Component {
 
       //possibly need to JSON.parse currentOrderId
       const guestOrder = await this.props.fetchCart(null, currentGuestOrderId);
-      console.log('guest order: ', guestOrder);
-      window.localStorage.setItem('currentOrderId', guestOrder.id);
+
+      console.log('guest order', this.props.order);
+      window.localStorage.setItem(
+        'currentOrderId',
+        JSON.stringify(this.props.order.id)
+      );
     }
     //then add item to order that is now in local storage
-    const orderId = this.props.orderId;
-    const { id, price } = pun;
-    await this.props.addToCart(id, orderId, 1, price);
+    const orderId = this.props.order.id;
+    console.log(pun, '= pun to add to cart');
+    console.log(orderId, '= order id');
+    console.log(
+      'arguments in add to cart in component: ',
+      pun.id,
+      orderId,
+      1,
+      pun.price
+    );
+
+    await this.props.addToCart(pun.id, orderId, 1, pun.price);
     console.log('this.props.order: ', this.props.order);
   }
 
@@ -87,8 +102,8 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchPuns: () => dispatch(fetchPuns()),
-    addToCart: ({ punId, orderId, qty, price }) =>
-      dispatch(addToCart({ punId, orderId, qty, price })),
+    addToCart: (punId, orderId, qty, price) =>
+      dispatch(addToCart(punId, orderId, qty, price)),
     fetchCart: (userId, orderId) => dispatch(fetchCart(userId, orderId)),
     createCart: (userInfo) => dispatch(createCart(userInfo)),
   };
