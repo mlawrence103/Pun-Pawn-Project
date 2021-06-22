@@ -1,38 +1,97 @@
-import React from "react"
-import { connect } from "react-redux"
-import { fetchPuns } from "../store/allPuns"
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchPuns } from '../store/allPuns';
+import { fetchCart, addToCart, createCart } from '../store/order';
 
 class AllPuns extends React.Component {
-  componentDidMount(){
-    console.log('componentDidMount')
-    this.props.fetchPuns()
+  constructor(props) {
+    super(props);
+    this.addItemToOrder = this.addItemToOrder.bind(this);
   }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+    this.props.fetchPuns();
+  }
+
+  async addItemToOrder(pun) {
+    //intitial check in parent component that checks for order in local storage and adds it to state
+    //check if there's an open order in state (not saved when leave site ==> user hasn't left site)
+
+    //check if user is logged in, and try to get that user's open cart. if there's not an open cart associated with that user, then create a new cart in the fetchCart thunk
+    const { isLoggedIn } = this.props;
+    if (isLoggedIn) {
+      console.log('LOGGED IN USER in add item to cart event handler');
+      const userOrder = await this.props.fetchCart(this.props.user, null);
+      console.log('user order: ', userOrder);
+    }
+    //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
+    else {
+      console.log('GUEST in add item to cart event handler');
+      const currentGuestOrderId = window.localStorage.getItem('currentOrderId');
+      console.log(
+        'current guest order id from local storage: ',
+        currentGuestOrderId
+      );
+      //if there's no currentGuestOrderId in local storage, it will be undefined which will cause fetchCart to create a new cart
+
+      //possibly need to JSON.parse currentOrderId
+      const guestOrder = await this.props.fetchCart(null, currentGuestOrderId);
+      console.log('guest order: ', guestOrder);
+      window.localStorage.setItem('currentOrderId', guestOrder.id);
+    }
+    //then add item to order that is now in local storage
+    const orderId = this.props.orderId;
+    const { id, price } = pun;
+    await this.props.addToCart(id, orderId, 1, price);
+    console.log('this.props.order: ', this.props.order);
+  }
+
   render() {
     return (
       <div>
         <h1>Puns:</h1>
         <ul className="listAll">
-            {this.props.allPuns.map((pun) => (
-                <li key={pun.id} >
-                    <h2>Pun: {pun.content}</h2>
-                </li>))
-            }
+          {this.props.allPuns.map((pun) => (
+            <div className="single-pun-in-list" key={pun.id}>
+              <Link to={`/puns/${pun.id}`}>
+                <li>
+                  <h2>Pun: {pun.content}</h2>
+                </li>
+              </Link>
+              <button
+                type="submit"
+                className="quick-add-to-cart"
+                onClick={() => this.addItemToOrder(pun)}
+              >
+                Add to Cart
+              </button>
+            </div>
+          ))}
         </ul>
       </div>
-      )
+    );
   }
 }
 
 const mapState = (state) => {
   return {
-    allPuns: state.allPuns
-  }
-}
+    allPuns: state.allPuns,
+    isLoggedIn: !!state.auth.id,
+    user: state.auth,
+    order: state.order,
+  };
+};
 
 const mapDispatch = (dispatch) => {
-  return ({
-    fetchPuns: () => dispatch(fetchPuns())
-  })
-}
+  return {
+    fetchPuns: () => dispatch(fetchPuns()),
+    addToCart: ({ punId, orderId, qty, price }) =>
+      dispatch(addToCart({ punId, orderId, qty, price })),
+    fetchCart: (userId, orderId) => dispatch(fetchCart(userId, orderId)),
+    createCart: (userInfo) => dispatch(createCart(userInfo)),
+  };
+};
 
 export default connect(mapState, mapDispatch)(AllPuns);

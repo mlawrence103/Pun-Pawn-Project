@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {
   models: { Order, Pun, LineItem, User },
-} = require("../db");
+} = require('../db');
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
@@ -14,6 +14,7 @@ router.get('/:orderId', async (req, res, next) => {
         {
           model: Pun,
           through: {
+            LineItem,
             where: {
               orderId: orderId,
             },
@@ -29,10 +30,10 @@ router.get('/:orderId', async (req, res, next) => {
 
 //create new order
 router.post('/', async (req, res, next) => {
+  console.log('HERE IN NEW ORDER POST ROUTE');
   try {
     //make sure getting proper order instance from store
     const {
-      status,
       emailAddress,
       shippingAddressName,
       shippingAddressStreet,
@@ -50,7 +51,7 @@ router.post('/', async (req, res, next) => {
           {
             model: Order,
             where: {
-              status: "open",
+              status: 'open',
             },
           },
         ],
@@ -58,10 +59,10 @@ router.post('/', async (req, res, next) => {
       //if user already has an open order, do not create new order
       if (userWithOpenOrder) {
         //is this the proper way to reference this?
-        throw new Error("You cannot create more than one open order per user.");
+        throw new Error('You cannot create more than one open order per user.');
       }
       order = await Order.create({
-        status,
+        status: 'open',
         emailAddress,
         shippingAddressName,
         shippingAddressStreet,
@@ -73,7 +74,7 @@ router.post('/', async (req, res, next) => {
     } else {
       //if guest cart, create new order without userId
       order = await Order.create({
-        status,
+        status: 'open',
         emailAddress,
         shippingAddressName,
         shippingAddressStreet,

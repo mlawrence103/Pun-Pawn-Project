@@ -1,13 +1,13 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
-  models: { User },
-} = require("../db");
+  models: { User, Order, Pun },
+} = require('../db');
 module.exports = router;
 const {
   requireToken,
   isAdmin,
   adminOrSelf,
-} = require("./gatekeepingMiddleware");
+} = require('./gatekeepingMiddleware');
 
 //get user info for admin (attach requireToken and isAdmin to check for auth)
 router.get("/admin", requireToken, isAdmin, async (req, res, next) => {
@@ -23,10 +23,10 @@ router.get("/admin", requireToken, isAdmin, async (req, res, next) => {
 
 //for a single user to find their own info/admin to access single user info
 // attach requireToken
-router.get("/:id", adminOrSelf, async (req, res, next) => {
+router.get('/:id', adminOrSelf, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ['password'] },
     });
     res.json(user);
   } catch (err) {
@@ -35,13 +35,13 @@ router.get("/:id", adminOrSelf, async (req, res, next) => {
 });
 
 //get open order by userId
-router.get("/:id/cart", async (req, res, next) => {
+router.get('/:id/cart', async (req, res, next) => {
   try {
     //make sure have requireToken
     const userId = req.params.id;
     //add eager loading to include where items' order id matches
     const order = await Order.findOne({
-      where: { userId: userId, status: "open" },
+      where: { userId: userId, status: 'open' },
       include: [
         {
           model: Pun,
@@ -98,7 +98,7 @@ router.post("/", isAdmin, async (req, res, next) => {
 //user should be able to update own profile
 //admine should be able to edit any profile
 //destructure req.body
-router.put("/:id", adminOrSelf, async (req, res, next) => {
+router.put('/:id', adminOrSelf, async (req, res, next) => {
   try {
     const {
       firstName,
