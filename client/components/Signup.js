@@ -5,63 +5,148 @@ import { authenticate } from '../store';
 /**
  * COMPONENT
  */
-const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, error } = props;
+class Signup extends React.Component {
+  constructor(props) {
+    super(props);
+    state = {
+      shippingState: '',
+      billingState: '',
+    };
+    this.selectShippingState = this.selectShippingState.bind(this);
+    this.selectBillingState = this.selectBillingState.bind(this);
+  }
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
+  selectShippingState(event) {
+    this.setState({
+      shippingState: parseInt(event.target.value),
+    });
+  }
+
+  selectBillingState(event) {
+    this.setState({
+      billingState: parseInt(event.target.value),
+    });
+  }
+
+  render() {
+    const { name, displayName, handleSubmit, error } = props;
+
+    return (
+      <div>
+        <form onSubmit={handleSubmit} name={name}>
           <div>
-            <label htmlFor="firstName">
-              <small>First Name</small>
+            <div>
+              <label htmlFor="firstName">
+                <small>First Name</small>
+              </label>
+              <input name="lastName" type="text" />
+            </div>
+            <div>
+              <label htmlFor="lastName">
+                <small>Last Name</small>
+              </label>
+              <input name="lastName" type="text" />
+            </div>
+            <label htmlFor="email">
+              <small>Email</small>
             </label>
-            <input name="lastName" type="text" />
+            <input name="email" type="text" />
           </div>
           <div>
-            <label htmlFor="lastName">
-              <small>Last Name</small>
+            <label htmlFor="password">
+              <small>Password</small>
             </label>
-            <input name="lastName" type="text" />
+            <input name="password" type="password" />
           </div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <h5>Shipping Info</h5>
-        <div>
-          <label htmlFor="shippingStreet">
-            <small>Street</small>
-          </label>
-          <input name="shippingStreet" type="text" />
-        </div>
-        <div>
-          <label htmlFor="shippingCity">
-            <small>City</small>
-          </label>
-          <input name="shippingCity" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">Sign Up</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-    </div>
-  );
-};
+          <h5>Shipping Info</h5>
+          <div>
+            <div>
+              <label htmlFor="shippingName">
+                <small>Name</small>
+              </label>
+              <input name="shippingName" type="text" />
+            </div>
+            <label htmlFor="shippingStreet">
+              <small>Street</small>
+            </label>
+            <input name="shippingStreet" type="text" />
+          </div>
+          <div>
+            <label htmlFor="shippingCity">
+              <small>City</small>
+            </label>
+            <input name="shippingCity" type="text" />
+          </div>
+          <div id="shippingDropdown">
+            <p>State:</p>
+            <select name="shippingState" onChange={this.selectShppingState}>
+              <option value="none" selected disabled hidden>
+                Select State
+              </option>
+              {this.props.states.map((state, idx) => {
+                return (
+                  <option key={idx} value={state}>
+                    {state}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="shippingZip">
+              <small>Zip Code</small>
+            </label>
+            <input name="shippingZip" type="text" />
+          </div>
+          <h5>Billing Info</h5>
+          <div>
+            <div>
+              <label htmlFor="billingName">
+                <small>Name</small>
+              </label>
+              <input name="billingName" type="text" />
+            </div>
+            <label htmlFor="billingStreet">
+              <small>Street</small>
+            </label>
+            <input name="billingStreet" type="text" />
+          </div>
+          <div>
+            <label htmlFor="billingCity">
+              <small>City</small>
+            </label>
+            <input name="billingCity" type="text" />
+          </div>
+          <div id="billingDropdown">
+            <p>State:</p>
+            <select name="billingState" onChange={this.selectBillingState}>
+              <option value="none" selected disabled hidden>
+                Select State
+              </option>
+              {this.props.states.map((state, idx) => {
+                return (
+                  <option key={idx} value={state}>
+                    {state}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="billingZip">
+              <small>Zip Code</small>
+            </label>
+            <input name="billingZip" type="text" />
+          </div>
+          <div>
+            <button type="submit">Sign Up</button>
+          </div>
+          {error && error.response && <div> {error.response.data} </div>}
+        </form>
+      </div>
+    );
+  }
+}
 
 /**
  * CONTAINER
@@ -76,6 +161,67 @@ const mapSignup = (state) => {
     name: 'signup',
     displayName: 'Sign Up',
     error: state.auth.error,
+    states: [
+      'AL',
+      'AK',
+      'AS',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'DC',
+      'FM',
+      'FL',
+      'GA',
+      'GU',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MH',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'MP',
+      'OH',
+      'OK',
+      'OR',
+      'PW',
+      'PA',
+      'PR',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VI',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY',
+    ],
   };
 };
 
@@ -91,5 +237,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm);
 export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
