@@ -120,7 +120,8 @@ export const createCart = (
       console.log("HERE in create cart thunk");
       const res = await axios.post("/api/orders/", userInfo);
       const order = res.data;
-      return dispatch(_createCart(order));
+      //return dispatch???
+      dispatch(_createCart(order));
     } catch (error) {
       console.log("Failed to create a new order", error);
     }
@@ -201,15 +202,17 @@ export const submitOrder = (order) => {
 };
 
 //initial state
-const initialState = { userId: null, total: 0, items: [] };
+const initialState = { userId: null, total: 0, items: [], orderId: null };
 
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CART:
       return action.order;
     case CREATE_CART:
+      console.log("in create cart reducer");
       return action.order;
     case ADD_TO_CART:
+      console.log("in add to cart reducer");
       return action.order;
     case DELETE_FROM_CART:
       return action.order;

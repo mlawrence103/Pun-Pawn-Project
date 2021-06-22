@@ -38,8 +38,12 @@ class AllPuns extends React.Component {
 
       //possibly need to JSON.parse currentOrderId
       const guestOrder = await this.props.fetchCart(null, currentGuestOrderId);
-      console.log("guest order: ", guestOrder);
-      window.localStorage.setItem("currentOrderId", guestOrder.id);
+
+      console.log("guest order", this.props.order);
+      window.localStorage.setItem(
+        "currentOrderId",
+        json.stringify(this.props.order.id)
+      );
     }
     //then add item to order that is now in local storage
     const orderId = this.props.order.id;
