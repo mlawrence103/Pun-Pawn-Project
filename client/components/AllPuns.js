@@ -16,6 +16,7 @@ class AllPuns extends React.Component {
   }
 
   async addItemToOrder(pun) {
+    debugger
     //intitial check in parent component that checks for order in local storage and adds it to state
     //check if there's an open order in state (not saved when leave site ==> user hasn't left site)
 
@@ -42,7 +43,7 @@ class AllPuns extends React.Component {
       console.log("guest order", this.props.order);
       window.localStorage.setItem(
         "currentOrderId",
-        json.stringify(this.props.order.id)
+        JSON.stringify(this.props.order.id)
       );
     }
     //then add item to order that is now in local storage

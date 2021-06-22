@@ -120,8 +120,8 @@ export const createCart = (
       console.log("HERE in create cart thunk");
       const res = await axios.post("/api/orders/", userInfo);
       const order = res.data;
-      //return dispatch???
       dispatch(_createCart(order));
+      return order
     } catch (error) {
       console.log("Failed to create a new order", error);
     }
