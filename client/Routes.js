@@ -4,7 +4,7 @@ import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import AllPuns from './components/AllPuns'
-import SinglePun from './components/SignlePun'
+import SinglePun from './components/SinglePun'
 import {me} from './store'
 
 /**
