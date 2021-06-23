@@ -4,8 +4,6 @@ import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import Signup from './components/Signup';
 import Home from './components/Home';
-import CreatePun from './components/CreatePun';
-import AllUsers from './components/AllUsers';
 import { me } from './store';
 import AllPuns from './components/AllPuns';
 import SinglePun from './components/SinglePun';
@@ -27,8 +25,6 @@ class Routes extends Component {
         {isLoggedIn ? (
           <Switch>
             <Route path="/home" component={Home} />
-            <Route exact path="/admin/add-pun" component={CreatePun} />
-            <Route exact path="/admin/user-list" component={AllUsers} />
             <Route exact path="/puns" component={AllPuns} />
             <Route path="/puns/:id" component={SinglePun} />
             <Route path="/checkout" component={Checkout} />
