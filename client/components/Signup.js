@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { authenticate } from '../store';
+import React from "react";
+import { connect } from "react-redux";
+import { authenticate } from "../store";
 
 /**
  * COMPONENT
@@ -9,20 +9,20 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      shippingName: '',
-      shippingStreet: '',
-      shippingCity: '',
-      shippingState: '',
-      shippingZip: '',
-      billingName: '',
-      billingStreet: '',
-      billingCity: '',
-      billingState: '',
-      billingZip: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      shippingName: "",
+      shippingStreet: "",
+      shippingCity: "",
+      shippingState: "",
+      shippingZip: "",
+      billingName: "",
+      billingStreet: "",
+      billingCity: "",
+      billingState: "",
+      billingZip: "",
     };
     // this.selectShippingState = this.selectShippingState.bind(this);
     // this.selectBillingState = this.selectBillingState.bind(this);
@@ -233,79 +233,81 @@ const mapSignup = (state) => {
   return {
     error: state.auth.error,
     states: [
-      'AL',
-      'AK',
-      'AS',
-      'AZ',
-      'AR',
-      'CA',
-      'CO',
-      'CT',
-      'DE',
-      'DC',
-      'FM',
-      'FL',
-      'GA',
-      'GU',
-      'HI',
-      'ID',
-      'IL',
-      'IN',
-      'IA',
-      'KS',
-      'KY',
-      'LA',
-      'ME',
-      'MH',
-      'MD',
-      'MA',
-      'MI',
-      'MN',
-      'MS',
-      'MO',
-      'MT',
-      'NE',
-      'NV',
-      'NH',
-      'NJ',
-      'NM',
-      'NY',
-      'NC',
-      'ND',
-      'MP',
-      'OH',
-      'OK',
-      'OR',
-      'PW',
-      'PA',
-      'PR',
-      'RI',
-      'SC',
-      'SD',
-      'TN',
-      'TX',
-      'UT',
-      'VT',
-      'VI',
-      'VA',
-      'WA',
-      'WV',
-      'WI',
-      'WY',
+      "AL",
+      "AK",
+      "AS",
+      "AZ",
+      "AR",
+      "CA",
+      "CO",
+      "CT",
+      "DE",
+      "DC",
+      "FM",
+      "FL",
+      "GA",
+      "GU",
+      "HI",
+      "ID",
+      "IL",
+      "IN",
+      "IA",
+      "KS",
+      "KY",
+      "LA",
+      "ME",
+      "MH",
+      "MD",
+      "MA",
+      "MI",
+      "MN",
+      "MS",
+      "MO",
+      "MT",
+      "NE",
+      "NV",
+      "NH",
+      "NJ",
+      "NM",
+      "NY",
+      "NC",
+      "ND",
+      "MP",
+      "OH",
+      "OK",
+      "OR",
+      "PW",
+      "PA",
+      "PR",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VT",
+      "VI",
+      "VA",
+      "WA",
+      "WV",
+      "WI",
+      "WY",
     ],
   };
 };
+
+//add function to check if there is a guest cart in local storage and if so, set newly created user to have the cart
 
 const mapDispatch = (dispatch) => {
   return {
     handleSubmit(evt) {
       evt.preventDefault();
-      const formName = 'signup';
+      const formName = "signup";
       const firstName = evt.target.firstName.value;
       const lastName = evt.target.lastName.value;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
-      console.log('firstName: ', firstName);
+      console.log("firstName: ", firstName);
       dispatch(authenticate(firstName, lastName, email, password, formName));
     },
   };
