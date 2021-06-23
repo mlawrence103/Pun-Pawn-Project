@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchPuns } from "../store/allPuns";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchPuns } from '../store/allPuns';
 import {
   fetchUserCart,
   fetchGuestCart,
   addToCart,
   createCart,
-} from "../store/order";
+} from '../store/order';
 
 class AllPuns extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class AllPuns extends React.Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log('componentDidMount');
     this.props.fetchPuns();
   }
 
@@ -28,22 +28,22 @@ class AllPuns extends React.Component {
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
       console.log(
-        "LOGGED IN USER in add item to cart event handler",
-        this.props.user.id
+        'LOGGED IN USER in add item to cart event handler',
+        this.props.user
       );
-      const userOrder = await this.props.fetchUserCart(this.props.user.id);
-      console.log("user order: ", userOrder);
+      const userOrder = await this.props.fetchUserCart(this.props.user);
+      console.log('user order: ', userOrder);
     }
     //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
     else {
-      console.log("GUEST in add item to cart event handler");
+      console.log('GUEST in add item to cart event handler');
 
       const currentGuestOrderId = parseInt(
-        window.localStorage.getItem("currentOrderId")
+        window.localStorage.getItem('currentOrderId')
       );
 
       console.log(
-        "current guest order id from local storage: ",
+        'current guest order id from local storage: ',
         currentGuestOrderId
       );
       //if there's no currentGuestOrderId in local storage, it will be undefined which will cause fetchCart to create a new cart
@@ -51,30 +51,30 @@ class AllPuns extends React.Component {
       //possibly need to JSON.parse currentOrderId
       const guestOrder = await this.props.fetchGuestCart(currentGuestOrderId);
 
-      console.log("guest order", this.props.order);
+      console.log('guest order', this.props.order);
       window.localStorage.setItem(
-        "currentOrderId",
+        'currentOrderId',
         JSON.stringify(this.props.order.id)
       );
     }
     //then add item to order that is now in local storage
     const orderId = this.props.order.id;
-    console.log(pun, "= pun to add to cart");
-    console.log(orderId, "= order id");
+    console.log(pun, '= pun to add to cart');
+    console.log(orderId, '= order id');
     console.log(
-      "arguments in add to cart in component: ",
+      'arguments in add to cart in component: ',
       pun.id,
-      "= pun.id",
+      '= pun.id',
       orderId,
-      "= order id",
+      '= order id',
       1,
-      "= quantity",
+      '= quantity',
       pun.price,
-      "= price"
+      '= price'
     );
 
     await this.props.addToCart(pun.id, orderId, 1, pun.price);
-    console.log("this.props ", this.props);
+    console.log('this.props ', this.props);
   }
 
   render() {
