@@ -85,7 +85,6 @@ User.prototype.correctPassword = function (candidatePwd) {
 
 User.prototype.generateToken = function () {
   const token = jwt.sign({ id: this.id }, process.env.JWT);
-  console.log('%%% in generate token: ', token);
   return token;
 };
 
@@ -93,18 +92,12 @@ User.prototype.generateToken = function () {
  * classMethods
  */
 User.authenticate = async function ({ email, password }) {
-  console.log(
-    '&&&& in user authenticate with email and password: ',
-    email,
-    password
-  );
   const user = await this.findOne({ where: { email } });
   if (!user || !(await user.correctPassword(password))) {
     const error = Error('Incorrect email/password');
     error.status = 401;
     throw error;
   }
-  console.log('NO ERROR THROWN in authenticate route');
   return user.generateToken();
 };
 
@@ -112,7 +105,7 @@ User.findByToken = async function (token) {
   try {
     const { id } = await jwt.verify(token, process.env.JWT);
     const user = await User.findByPk(id);
-    console.log('>>>>>>>>>>>>>>>>user is ', user);
+    // console.log('>>>>>>>>>>>>>>>>user is ', user);
     if (!user) {
       throw 'nooo';
     }

@@ -1,14 +1,13 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { withRouter, Route, Switch, Redirect } from "react-router-dom";
-import { Login } from "./components/AuthForm";
-import Signup from "./components/Signup";
-import Home from "./components/Home";
-import CreatePun from "./components/CreatePun";
-import { me } from "./store";
-import AllPuns from "./components/AllPuns";
-import SinglePun from "./components/SinglePun";
-import Checkout from "./components/Checkout";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Login } from './components/AuthForm';
+import Signup from './components/Signup';
+import Home from './components/Home';
+import { me } from './store';
+import AllPuns from './components/AllPuns';
+import SinglePun from './components/SinglePun';
+import Checkout from './components/Checkout';
 
 /**
  * COMPONENT
@@ -26,7 +25,6 @@ class Routes extends Component {
         {isLoggedIn ? (
           <Switch>
             <Route path="/home" component={Home} />
-            <Route exact path="/admin/addPun" component={CreatePun} />
             <Route exact path="/puns" component={AllPuns} />
             <Route path="/puns/:id" component={SinglePun} />
             <Route path="/checkout" component={Checkout} />
