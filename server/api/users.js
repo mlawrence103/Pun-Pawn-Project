@@ -4,13 +4,12 @@ const {
 } = require('../db');
 module.exports = router;
 const {
-  requireToken,
   isAdmin,
   adminOrSelf,
 } = require('./gatekeepingMiddleware');
 
 //get user info for admin (attach requireToken and isAdmin to check for auth)
-router.get("/admin", requireToken, isAdmin, async (req, res, next) => {
+router.get("/admin", isAdmin, async (req, res, next) => {
   try {
     const users = await User.findAll({
       attributes: { exclude: ["password"] },
@@ -35,7 +34,7 @@ router.get('/:id', adminOrSelf, async (req, res, next) => {
 });
 
 //get open order by userId
-router.get('/:id/cart', async (req, res, next) => {
+router.get('/:id/cart', adminOrSelf, async (req, res, next) => {
   try {
     //make sure have requireToken
     const userId = req.params.id;
@@ -49,6 +48,23 @@ router.get('/:id/cart', async (req, res, next) => {
       ],
     });
     res.json(order);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:id/order-history', adminOrSelf, async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const { data } = await Order.findAll({
+      where: { userId: userId},
+      include: [
+        {
+          model: Pun,
+        },
+      ],
+    });
+    res.json(data);
   } catch (err) {
     next(err);
   }
