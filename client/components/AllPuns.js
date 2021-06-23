@@ -29,9 +29,11 @@ class AllPuns extends React.Component {
     //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
     else {
       console.log('GUEST in add item to cart event handler');
+
       const currentGuestOrderId = parseInt(
         window.localStorage.getItem('currentOrderId')
       );
+
       console.log(
         'current guest order id from local storage: ',
         currentGuestOrderId
