@@ -46,6 +46,20 @@ nav a {
   margin-top: 1rem;
 }
 
+/* Checkout */
+.cart-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.cart-item h4,
+.cart-item h5 {
+  margin: 1rem;
+}
+
+.cart-item h4 {
+  width: 15rem;
+
 .listAllPuns {
   display: flex;
   flex-wrap: wrap;
@@ -76,4 +90,5 @@ nav a {
 .admin-edit-inventory-buttons {
   display: flex;
   justify-content: space-evenly;
+
 }
