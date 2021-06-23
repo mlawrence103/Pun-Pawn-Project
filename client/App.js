@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import AdminNavBar from './components/AdminNavbar';
 import { connect } from 'react-redux';
-import AdminRoutes from './AdminRoutes';
 import Routes from './Routes';
 
 class App extends React.Component {
@@ -11,8 +10,9 @@ class App extends React.Component {
       <div>
         {this.props.isAdmin ? (
           <div>
+            <Navbar />
             <AdminNavBar />
-            <AdminRoutes />
+            <Routes />
           </div>
         ) : (
           <div>

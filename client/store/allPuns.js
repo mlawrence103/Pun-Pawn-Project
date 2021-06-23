@@ -51,7 +51,7 @@ export const createPun = (pun, history) => {
 export const deletePun = (id) => {
   return async (dispatch) => {
     try {
-      const res = await axios.delete(`api/puns/${id}`);
+      const res = await axios.delete(`/api/puns/${id}`);
       const pun = res.data;
       dispatch(_deletePun(pun));
     } catch (error) {

@@ -41,11 +41,6 @@ class AllPuns extends React.Component {
       const currentGuestOrderId = parseInt(
         window.localStorage.getItem('currentOrderId')
       );
-
-      console.log(
-        'current guest order id from local storage: ',
-        currentGuestOrderId
-      );
       //if there's no currentGuestOrderId in local storage, it will be undefined which will cause fetchCart to create a new cart
 
       //possibly need to JSON.parse currentOrderId
@@ -81,14 +76,13 @@ class AllPuns extends React.Component {
     return (
       <div>
         <h1>Puns:</h1>
-        <ul className="listAll">
+        <ul className="listAllPuns">
           {this.props.allPuns.map((pun) => (
             <div className="single-pun-in-list" key={pun.id}>
               <Link to={`/puns/${pun.id}`}>
-                <li>
-                  <h2>Pun: {pun.content}</h2>
-                </li>
+                <h2>{pun.content}</h2>
               </Link>
+              <h5>${pun.price / 100}</h5>
               <button
                 type="submit"
                 className="quick-add-to-cart"
