@@ -100,12 +100,14 @@ export const fetchUserCart = (user) => {
 };
 
 export const fetchGuestCart = (orderId = null) => {
+  console.log('in fetch guest cart with orderId: ', orderId);
   return async (dispatch) => {
     try {
       let cart = {};
       if (orderId) {
         const { data } = await axios.get(`/api/orders/${orderId}`);
         cart = data;
+        console.log('in fetch guest cart thunk with cart: ', cart);
       } else {
         //else if there is no userId or orderId
         const create = createCart();

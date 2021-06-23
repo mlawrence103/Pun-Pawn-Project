@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import { fetchUserCart, fetchGuestCart, checkoutCart } from "../store/order";
-import { fetchUser, updatingAccount } from "../store/singleUser";
+import React from 'react';
+import { connect } from 'react-redux';
+import { fetchUserCart, fetchGuestCart, checkoutCart } from '../store/order';
+import { fetchUser, updatingAccount } from '../store/singleUser';
 
 // -local state includes payment info
 // -shows items cart w/price and text (order reducer)
@@ -11,16 +11,16 @@ export class Checkout extends React.Component {
   constructor() {
     super();
     this.state = {
-      shippingAddressName: "",
-      shippingAddressStreet: "",
-      shippingAddressCity: "",
-      shippingAddressState: "",
-      shippingAddressZip: "",
-      billingAddressName: "",
-      billingAddressStreet: "",
-      billingAddressCity: "",
-      billingAddressState: "",
-      billingAddressZip: "",
+      shippingAddressName: '',
+      shippingAddressStreet: '',
+      shippingAddressCity: '',
+      shippingAddressState: '',
+      shippingAddressZip: '',
+      billingAddressName: '',
+      billingAddressStreet: '',
+      billingAddressCity: '',
+      billingAddressState: '',
+      billingAddressZip: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,16 +28,18 @@ export class Checkout extends React.Component {
 
   async componentDidMount() {
     try {
-      console.log("component did mount");
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
+        console.log('user is logged in in checkout');
         await this.props.loadUserCart();
         await this.props.loadUserInfo();
       } else {
         const currentGuestOrderId = parseInt(
-          window.localStorage.getItem("currentOrderId")
+          window.localStorage.getItem('currentOrderId')
         );
-        await this.props.fetchGuestCart(currentGuestOrderId);
+        console.log('guest in checkout with id: ', currentGuestOrderId);
+        await this.props.loadGuestCart(currentGuestOrderId);
+        console.log('GUEST CART in checkout: ', this.props.order);
       }
     } catch (error) {
       console.log(error);
@@ -57,35 +59,34 @@ export class Checkout extends React.Component {
     // otherwise we are just going to update it from user info
     // this.props.userInfo(this.props.singleUser.this.props.singleUser)
     this.setState({
-      shippingAddressName: "",
-      shippingAddressStreet: "",
-      shippingAddressCity: "",
-      shippingAddressState: "",
-      shippingAddressZip: "",
-      billingAddressName: "",
-      billingAddressStreet: "",
-      billingAddressCity: "",
-      billingAddressState: "",
-      billingAddressZip: "",
+      shippingAddressName: '',
+      shippingAddressStreet: '',
+      shippingAddressCity: '',
+      shippingAddressState: '',
+      shippingAddressZip: '',
+      billingAddressName: '',
+      billingAddressStreet: '',
+      billingAddressCity: '',
+      billingAddressState: '',
+      billingAddressZip: '',
     });
   }
 
   render() {
-    console.log(this.state, "state in checkout");
-    console.log(this.props, "props in checkout");
+    // console.log(this.state, 'state in checkout');
+    // console.log(this.props, 'props in checkout');
+    const puns = this.props.order.puns || [];
     return (
       <div>
         <h1>Checkout</h1>
         <div>
           <h1>Cart</h1>
-          {this.props.order.puns.map((lineItem) => {
+          {puns.map((lineItem) => {
             return (
-              <div key={lineItem.punId}>
-                <li>
-                  <h4>{puns.content}</h4>
-                  <h5>${lineItem.price}</h5>
-                  <h5>Quantity: {lineItem.quantity}</h5>
-                </li>
+              <div className="cart-item" key={lineItem.punId}>
+                <h4>{lineItem.content}</h4>
+                <h5>${lineItem.price}</h5>
+                <h5>Quantity: {lineItem.quantity}</h5>
               </div>
             );
           })}
@@ -167,6 +168,7 @@ export class Checkout extends React.Component {
 }
 
 const mapState = (state) => {
+  // console.log('state in Checkout component: ', state);
   return {
     singleUser: state.singleUser,
     order: state.order,
