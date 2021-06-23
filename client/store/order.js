@@ -1,6 +1,8 @@
 import axios from "axios";
 import history from "../history";
 
+const TOKEN = "token";
+
 //OPEN order = cart
 //action types
 const SET_CART = "SET_CART";
@@ -54,10 +56,15 @@ const _submitOrder = (order) => ({
 //thunk creators
 
 //this is called when we have a logged in user
-export const fetchUserCart = (user) => {
+export const fetchUserCart = (userId) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(`/api/users/${user.id}/cart`);
+      const token = window.localStorage.getItem(TOKEN);
+      const res = await axios.get(`/api/users/${userId}/cart`, {
+        headers: {
+          authorization: token,
+        },
+      });
       let cart = res.data;
       //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
       if (!cart) {
@@ -97,6 +104,7 @@ export const fetchGuestCart = (orderId = null) => {
         const { data } = await axios.get(`/api/orders/${orderId}`);
         cart = data;
       } else {
+        //else if there is no userId or orderId
         const create = createCart();
         cart = await create(dispatch);
       }
@@ -132,15 +140,12 @@ export const createCart = (
 };
 
 export const addToCart = (punId, orderId, qty, price) => {
-  console.log("HERE in add to cart thunk");
-  console.log("arguments: ", punId, orderId, qty, price);
   return async (dispatch) => {
     try {
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
       const lineItem = { punId, orderId, qty, price };
-      console.log(lineItem, "line item in add to cart");
       const res = await axios.post("/api/orders/addToCart", lineItem);
       const updatedLineItem = res.data;
       updatedLineItem["total"] = qty * price;

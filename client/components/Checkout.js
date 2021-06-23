@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchCart, checkoutCart } from "../store/order";
+import { fetchUserCart, fetchGuestCart, checkoutCart } from "../store/order";
 import { fetchUser, updatingAccount } from "../store/singleUser";
 
 // -local state includes payment info
@@ -29,8 +29,16 @@ export class Checkout extends React.Component {
   async componentDidMount() {
     try {
       console.log("component did mount");
-      await this.props.loadCart();
-      await this.props.loadUserInfo();
+      const { isLoggedIn } = this.props;
+      if (isLoggedIn) {
+        await this.props.loadUserCart();
+        await this.props.loadUserInfo();
+      } else {
+        const currentGuestOrderId = parseInt(
+          window.localStorage.getItem("currentOrderId")
+        );
+        await this.props.fetchGuestCart(currentGuestOrderId);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -63,6 +71,8 @@ export class Checkout extends React.Component {
   }
 
   render() {
+    console.log(this.state, "state in checkout");
+    console.log(this.props, "props in checkout");
     return (
       <div>
         <h1>Checkout</h1>
@@ -160,11 +170,13 @@ const mapState = (state) => {
   return {
     singleUser: state.singleUser,
     order: state.order,
+    isLoggedIn: !!state.auth.id,
   };
 };
 
 const mapDispatch = (dispatch) => ({
-  loadCart: (userId, orderId) => dispatch(fetchCart(userId, orderId)),
+  loadUserCart: (userId) => dispatch(fetchUserCart(userId)),
+  loadGuestCart: (orderId) => dispatch(fetchGuestCart(orderId)),
   loadUserInfo: (userId) => dispatch(fetchUser(userId)),
   updateOrderInfo: (order) => dispatch(checkoutCart(order)),
   updateUserInfo: (userId, user) => dispatch(updateAccount(userId, user)),
