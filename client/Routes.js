@@ -11,6 +11,7 @@ import SinglePun from './components/SinglePun'
 import {me} from './store'
 import Checkout from './components/Checkout';
 
+
 /**
  * COMPONENT
  */
@@ -42,6 +43,7 @@ class Routes extends Component {
             <Route exact path="/puns" component={AllPuns} />
             <Route path="/puns/:id" component={SinglePun} />
             <Route path="/checkout" component={Checkout} />
+
 
           </Switch>
         )}
