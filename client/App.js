@@ -11,7 +11,9 @@ class App extends React.Component {
       <div>
         {this.props.isAdmin ? (
           <div>
+            <Navbar />
             <AdminNavBar />
+            <Routes />
             <AdminRoutes />
           </div>
         ) : (

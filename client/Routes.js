@@ -9,7 +9,10 @@ import AllPuns from './components/AllPuns';
 import SinglePun from './components/SinglePun';
 import Checkout from './components/Checkout';
 import OrderHistory from './components/OrderHistory';
-
+import CreatePun from './components/CreatePun';
+import AllUsers from './components/AllUsers';
+import AdminAllPuns from './components/AdminAllPuns';
+import EditPun from './components/EditPun';
 /**
  * COMPONENT
  */
@@ -30,6 +33,10 @@ class Routes extends Component {
             <Route path="/puns/:id" component={SinglePun} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/users/order-history" component={OrderHistory} />
+            <Route path="/admin/add-pun" component={CreatePun} />
+            <Route path="/admin/user-list" component={AllUsers} />
+            <Route path="/admin/edit-inventory" component={AdminAllPuns} />
+            <Route path="/admin/puns/:id/edit" component={EditPun} />
             <Redirect to="/home" />
           </Switch>
         ) : (

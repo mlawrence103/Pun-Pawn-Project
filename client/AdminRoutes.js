@@ -4,8 +4,9 @@ import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import AllUsers from './components/AllUsers';
-import AllPuns from './components/AllPuns';
+import AdminAllPuns from './components/AdminAllPuns';
 import CreatePun from './components/CreatePun';
+import EditPun from './components/EditPun';
 import { me } from './store';
 
 /**
@@ -20,10 +21,10 @@ class Routes extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/home" component={Home} />
           <Route exact path="/admin/add-pun" component={CreatePun} />
           <Route exact path="/admin/user-list" component={AllUsers} />
-          <Route exact path="/admin/edit-inventory" component={AllPuns} />
+          <Route exact path="/admin/edit-inventory" component={AdminAllPuns} />
+          <Route exact path="/admin/puns/:id/edit" component={EditPun} />
         </Switch>
       </div>
     );
@@ -35,8 +36,6 @@ class Routes extends Component {
  */
 const mapState = (state) => {
   return {
-    // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
-    // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
     isLoggedIn: !!state.auth.id,
   };
 };
@@ -49,6 +48,5 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
+
 export default withRouter(connect(mapState, mapDispatch)(Routes));

@@ -3,6 +3,7 @@ body {
 }
 
 a {
+  color: black;
   text-decoration: none;
 }
 
@@ -43,4 +44,36 @@ nav a {
 
 #signup-button {
   margin-top: 1rem;
+}
+
+.listAllPuns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.single-pun-in-list {
+  width: 15rem;
+  height: 15rem;
+  padding: 1rem;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.single-pun-in-list h2 {
+  color: black;
+  font-size: 16px;
+}
+
+.single-pun-in-list h2:hover {
+  color: red;
+}
+
+.quick-add-to-cart {
+  margin-bottom: 1rem;
+}
+
+.admin-edit-inventory-buttons {
+  display: flex;
+  justify-content: space-evenly;
 }
