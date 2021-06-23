@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Login, Signup } from './components/AuthForm';
+import Home from './components/Home';
 import AllUsers from './components/AllUsers';
+import AllPuns from './components/AllPuns';
 import CreatePun from './components/CreatePun';
 import { me } from './store';
 
@@ -15,13 +17,13 @@ class Routes extends Component {
   }
 
   render() {
-    const { isAdmin } = this.props;
-
     return (
       <div>
         <Switch>
+          <Route path="/home" component={Home} />
           <Route exact path="/admin/add-pun" component={CreatePun} />
           <Route exact path="/admin/user-list" component={AllUsers} />
+          <Route exact path="/admin/edit-inventory" component={AllPuns} />
         </Switch>
       </div>
     );
