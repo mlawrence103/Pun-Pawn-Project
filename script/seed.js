@@ -496,6 +496,374 @@ async function seed() {
     quantity: 15,
   });
 
+  const pun61 = await Pun.create({
+    content: "Have you used a shovel? It's a ground-breaking invention!",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun62 = await Pun.create({
+    content: "A plateau is the highest form of flattery.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun63 = await Pun.create({
+    content:
+      "I sued the airline when they couldn't find my luggage. Sadly, I lost my case.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun64 = await Pun.create({
+    content:
+      "I'm glad I was finally fired from my can crushing job. The work was soda pressing.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun65 = await Pun.create({
+    content: "How much does a pirate pay for corn? A buccaneer.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun66 = await Pun.create({
+    content: "A termite walks into a bar and asks, 'Where is the bar tender?'",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun67 = await Pun.create({
+    content:
+      "The librarian got annoyed when we put the books back in the wrong places. We ought to be ashamed of ourshelves.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun68 = await Pun.create({
+    content: "Why did the tomato blush? It saw the salad dressing.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun69 = await Pun.create({
+    content: "The sesame seed couldn't leave the casino. It was on a roll.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun70 = await Pun.create({
+    content:
+      "It was a terrible summer for Humpty Dumpty. But he had a great fall.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun71 = await Pun.create({
+    content:
+      "A bald man wanted to borrow my comb, but I know he'd never part with it.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun72 = await Pun.create({
+    content: "I repair elevators for a living. It has its ups and downs.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun73 = await Pun.create({
+    content: "I used to be a banker, but then I lost interest.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun74 = await Pun.create({
+    content: "You can't take out coffee from this cafe. It's grounded.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun75 = await Pun.create({
+    content: "It was such a beautiful wedding. Even the cake was in tiers.",
+    price: 50,
+    quantity: 5,
+  });
+
+  const pun76 = await Pun.create({
+    content:
+      "No matter how hard you push the envelope, it will still be stationary.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun77 = await Pun.create({
+    content: "Will glass coffins be a success? Remains to be seen.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun78 = await Pun.create({
+    content: "I built a robot clown. It works with the circuits.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun79 = await Pun.create({
+    content:
+      "I try not to eat anything with food coloring. I feel like I dye a little inside.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun80 = await Pun.create({
+    content:
+      "He tried to cope with his claustrophobia but struggled to think outside the box.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun81 = await Pun.create({
+    content: "A mermaid skipped math class. She forgot her algae-bra.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun82 = await Pun.create({
+    content: "Small babies are delivered by stork. The big ones need a crane.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun83 = await Pun.create({
+    content: "To the person who invented zero, thanks for nothing.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun84 = await Pun.create({
+    content:
+      "A food critic reviewed the new space-themed restaurant. The food was good, but it had no atmosphere.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun85 = await Pun.create({
+    content: "Dumbo was sad. The other animals called him ear-relephant.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun86 = await Pun.create({
+    content:
+      "I lost my mood ring the other day. I don't know how I feel about that.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun87 = await Pun.create({
+    content:
+      "I may not know what 'apocalypse' means, but it's not like it's the end of the world.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun88 = await Pun.create({
+    content: "Waking up this morning was an eye opening experience.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun89 = await Pun.create({
+    content: "Long fairy tales have a tendency to dragon.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun90 = await Pun.create({
+    content:
+      "I have a candy cane collection. The best ones are in mint condition.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun91 = await Pun.create({
+    content: "For sale: wigs for $1. Small price toupee.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun92 = await Pun.create({
+    content:
+      "People say I'm the cheapest person they ever met, but I'm just not buying it.",
+    price: 725,
+    quantity: 80,
+  });
+
+  const pun93 = await Pun.create({
+    content: "There's a typo on that tombstone. What a grave mistake.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun94 = await Pun.create({
+    content: "Geology rocks, but geography is where it's at.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun95 = await Pun.create({
+    content:
+      "Someone has been removing wheels off of every vehicle in sight. Police are working tirelessly to catch the perp.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun96 = await Pun.create({
+    content: "Due to the lockdown, I'll only be telling inside jokes.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun97 = await Pun.create({
+    content: "My pony has a sore throat. It's a little horse.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun98 = await Pun.create({
+    content:
+      "I used to be addicted to the hokey pokey, but then I turned myself around.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun99 = await Pun.create({
+    content:
+      "I didn't realize Canada is real. I thought it was the land of mapleleaf.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun100 = await Pun.create({
+    content:
+      "My hen likes to count her eggs everyday. She's a true mathemachicken.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun101 = await Pun.create({
+    content:
+      "Yo, I forgot to answer you when you asked me for that pamphlet. Sorry, brochure.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun102 = await Pun.create({
+    content:
+      "Back in the day, he swept many people off their feet. Then he was fired for being such an aggressive janitor.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun103 = await Pun.create({
+    content:
+      "I rented a limo but forgot to hire a driver. All that money and nothing to chauffeur it.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun104 = await Pun.create({
+    content:
+      "England doesn't have a kidney bank, but it does have a Liverpool.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun105 = await Pun.create({
+    content:
+      "What is the quickest way to make antifreeze? Take away her blanket.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun106 = await Pun.create({
+    content:
+      "I refuse to go to a nude beach. I guess I'm just too clothes-minded.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun107 = await Pun.create({
+    content: "Cause of death: train. It was a loco-motive.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun108 = await Pun.create({
+    content: "I had to quit my job as a programmer. I never did get arrays.",
+    price: 400,
+    quantity: 10,
+  });
+
+  const pun109 = await Pun.create({
+    content: "A programmer cheered, '['hip', 'hip']'!",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun110 = await Pun.create({
+    content: "I finally got a new sofa. It was a chairishable moment.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun111 = await Pun.create({
+    content:
+      "The priest wasn't sure what to say at the wilted flower's funeral so he went with the classic 'dearly depotted'.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun112 = await Pun.create({
+    content: "The rhinoceros called the hippopotamus fat. How hippo-critical!",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun113 = await Pun.create({
+    content: "I wish I had more time to eat. So I went back four seconds.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun114 = await Pun.create({
+    content: "A vegetarian thought she knew me, but I had never met herbivore.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun115 = await Pun.create({
+    content:
+      "I wanted to throw a space-themed party, but I didn't want to planet.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun116 = await Pun.create({
+    content: "My bicycle can't stand up on it's own. It's two tired.",
+    price: 940,
+    quantity: 20,
+  });
+
+  const pun117 = await Pun.create({
+    content:
+      "When they told him to stop impersonating flamingos, he had to put his foot down.",
+    price: 940,
+    quantity: 20,
+  });
+
   const order1 = await Order.create({
     status: "open",
     emailAddress: "brenda.wong@gmail.com",
