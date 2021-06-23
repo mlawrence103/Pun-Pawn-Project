@@ -59,15 +59,12 @@ router.get('/:id/cart', adminOrSelf, async (req, res, next) => {
 router.get('/:id/order-history', adminOrSelf, async (req, res, next) => {
   try {
     const userId = req.params.id;
-    const { data } = await Order.findAll({
-      where: { userId: userId},
-      include: [
-        {
-          model: Pun,
-        },
-      ],
+    console.log(`userId is ${userId}`)
+    const responce = await Order.findAll({
+      where: {userId:userId}
     });
-    res.json(data);
+    console.log(`this is the order history ${responce}`)
+    res.send(responce.data);
   } catch (err) {
     next(err);
   }
