@@ -1,19 +1,21 @@
-import axios from "axios";
-import history from "../history";
+import axios from 'axios';
+import history from '../history';
+
+const TOKEN = 'token';
 
 //OPEN order = cart
 //action types
-const SET_CART = "SET_CART";
-const CREATE_CART = "CREATE_CART";
-const ADD_TO_CART = "ADD_TO_CART";
-const DELETE_FROM_CART = "DELETE_FROM_CART";
-const EDIT_ITEM_QTY = "EDIT_ITEM_QTY";
-const CHECKOUT_CART = "CHECKOUT_CART";
-const SUBMIT_ORDER = "SUBMIT_ORDER";
+const SET_CART = 'SET_CART';
+const CREATE_CART = 'CREATE_CART';
+const ADD_TO_CART = 'ADD_TO_CART';
+const DELETE_FROM_CART = 'DELETE_FROM_CART';
+const EDIT_ITEM_QTY = 'EDIT_ITEM_QTY';
+const CHECKOUT_CART = 'CHECKOUT_CART';
+const SUBMIT_ORDER = 'SUBMIT_ORDER';
 
 //action creators
 const setCart = (order) => {
-  console.log("order in setCart action: ", order);
+  console.log('order in setCart action: ', order);
   return {
     type: SET_CART,
     order,
@@ -55,12 +57,19 @@ const _submitOrder = (order) => ({
 
 //this is called when we have a logged in user
 export const fetchUserCart = (user) => {
+  console.log('in fetch user cart thunk with user id: ', user.id);
   return async (dispatch) => {
     try {
-      const res = await axios.get(`/api/users/${user.id}/cart`);
+      const token = window.localStorage.getItem(TOKEN);
+      const res = await axios.get(`/api/users/${user.id}/cart`, {
+        headers: {
+          authorization: token,
+        },
+      });
       let cart = res.data;
       //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
       if (!cart) {
+        console.log('User does NOT have open order -> create new order');
         const {
           email,
           shippingAddressName,
@@ -80,11 +89,12 @@ export const fetchUserCart = (user) => {
           userId: id,
         });
         cart = await create(dispatch);
+        console.log('created user cart: ', cart);
       }
       const action = setCart(cart);
       dispatch(action);
     } catch (error) {
-      console.log("Cannot find cart", error);
+      console.log('Cannot find cart', error);
     }
   };
 };
@@ -97,13 +107,14 @@ export const fetchGuestCart = (orderId = null) => {
         const { data } = await axios.get(`/api/orders/${orderId}`);
         cart = data;
       } else {
+        //else if there is no userId or orderId
         const create = createCart();
         cart = await create(dispatch);
       }
       const action = setCart(cart);
       dispatch(action);
     } catch (error) {
-      console.log("Cannot find cart", error);
+      console.log('Cannot find cart', error);
     }
   };
 };
@@ -121,32 +132,53 @@ export const createCart = (
 ) => {
   return async (dispatch) => {
     try {
-      const res = await axios.post("/api/orders/", userInfo);
+      const res = await axios.post('/api/orders/', userInfo);
       const order = res.data;
       dispatch(_createCart(order));
       return order;
     } catch (error) {
-      console.log("Failed to create a new order", error);
+      console.log('Failed to create a new order', error);
     }
   };
 };
 
 export const addToCart = (punId, orderId, qty, price) => {
-  console.log("HERE in add to cart thunk");
-  console.log("arguments: ", punId, orderId, qty, price);
   return async (dispatch) => {
     try {
+      console.log('HERE in add to cart thunk');
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
       const lineItem = { punId, orderId, qty, price };
-      console.log(lineItem, "line item in add to cart");
-      const res = await axios.post("/api/orders/addToCart", lineItem);
+      //add statement here to check if line item exists
+      const existingLineItem = await axios.get(
+        `/api/orders/${orderId}/pun/${punId}`
+      );
+      console.log('existingLineItem: ', existingLineItem.data);
+      await axios.put(`/api/orders/${orderId}/updateTotal`, {
+        total: qty * price,
+      });
+      let res;
+      if (existingLineItem.data.length) {
+        console.log(
+          'This item already exists in this order --> update line item quantity'
+        );
+        res = await axios.put('/api/orders/editLineItem', {
+          punId: punId,
+          orderId: orderId,
+          quantity: qty,
+        });
+      } else {
+        console.log(
+          'create a new line item because item does not exist in this order'
+        );
+        res = await axios.post('/api/orders/addToCart', lineItem);
+      }
       const updatedLineItem = res.data;
-      updatedLineItem["total"] = qty * price;
+      // updatedLineItem['total'] = qty * price;
       dispatch(_addToCart(updatedLineItem));
     } catch (error) {
-      console.log("Failed to add item to cart", error);
+      console.log('Failed to add item to cart', error);
     }
   };
 };
@@ -156,12 +188,12 @@ export const deleteFromCart = (punId, orderId) => {
     const requestBody = { punId, orderId };
     try {
       const { data: pun } = await axios.delete(
-        "/api/orders/deleteItem",
+        '/api/orders/deleteItem',
         requestBody
       );
       dispatch(_deleteFromCart(pun));
     } catch (error) {
-      console.log("Unable to remove item from cart", error);
+      console.log('Unable to remove item from cart', error);
     }
   };
 };
@@ -170,12 +202,12 @@ export const editItemQty = (punId, orderId, qty, price) => {
   return async (dispatch) => {
     try {
       const lineItem = { punId: punId, orderId: orderId, quantity: qty };
-      const res = await axios.put("/api/orders/editLineItem", lineItem);
+      const res = await axios.put('/api/orders/editLineItem', lineItem);
       const updatedLineItem = res.data;
-      updatedLineItem["total"] = qty * price;
+      updatedLineItem['total'] = qty * price;
       dispatch(_editItemQty(updatedLineItem));
     } catch (error) {
-      console.log("Failed to edit cart", error);
+      console.log('Failed to edit cart', error);
     }
   };
 };
@@ -187,7 +219,7 @@ export const checkoutCart = (order) => {
       const { data } = await axios.put(`/${order.id}/checkout`, order);
       dispatch(_checkoutCart(data));
     } catch (error) {
-      console.log("Unable to update checkout information", error);
+      console.log('Unable to update checkout information', error);
     }
   };
 };
@@ -199,7 +231,7 @@ export const submitOrder = (order) => {
       const { data } = await axios.put(`/${order.id}/submit`, order);
       dispatch(_submitOrder(data));
     } catch (error) {
-      console.log("Unable to process checkout", error);
+      console.log('Unable to process checkout', error);
     }
   };
 };
@@ -212,10 +244,10 @@ export default function orderReducer(state = initialState, action) {
     case SET_CART:
       return action.order;
     case CREATE_CART:
-      console.log("in create cart reducer");
+      console.log('in create cart reducer');
       return action.order;
     case ADD_TO_CART:
-      console.log("in add to cart reducer");
+      console.log('in add to cart reducer');
       return action.order;
     case DELETE_FROM_CART:
       return action.order;
