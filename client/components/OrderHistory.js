@@ -3,24 +3,21 @@ import { connect } from 'react-redux';
 import { fetchOrderHistory } from '../store/order-history';
 
 class OrderHistory extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-      this.props.fetchOrderHistory(this.props.userId)
-  }
+    console.log(this.props.userId)  
+    this.props.fetchOrderHistory(this.props.userId)
+    }
 
   render() {
     return (
       <div>
         <h1>Order History:</h1>
         <ul className="listAll">
-          {this.props.orders.map((order) => (
+          {this.props.orders ? (this.props.orders.map((order) => (
             <div className="order-in-history" key={order.id}>
                 <h4>order number {order.id}</h4>
             </div>
-          ))}
+          ))) : (<h1>no orders to show</h1>)}
         </ul>
       </div>
     );
@@ -29,14 +26,14 @@ class OrderHistory extends React.Component {
 
 const mapState = (state) => {
   return {
-      orders: order,
+      orders: state.orders,
       userId: state.auth.id
     }
 };
 
 const mapDispatch = (dispatch) => {
   return {
-      fetchOrderHistory: (userId) => fetchOrderHistory(userId)
+      fetchOrderHistory: (userId) => dispatch(fetchOrderHistory(userId))
   };
 };
 

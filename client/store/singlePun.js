@@ -35,7 +35,7 @@ export const updatePun = (pun, history) => {
       const res = await axios.put(`/api/puns/${pun.id}`, pun);
       const updatedPun = res.data;
       dispatch(_updatePun(updatedPun));
-      history.push(`/puns/${pun.id}`);
+      history.push(`/admin/edit-inventory`);
     } catch (error) {
       console.log(error);
     }
