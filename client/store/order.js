@@ -94,20 +94,11 @@ export const fetchGuestCart = (orderId = null) => {
     try {
       let cart = {};
       if (orderId) {
-        console.log("type of order id: ", typeof orderId);
-        console.log("ORDER ID in fetch order reducer: ", orderId);
         const { data } = await axios.get(`/api/orders/${orderId}`);
-        console.log("data returned from get by orderId req: ", data);
         cart = data;
-        console.log("GUEST CART with open order: ", cart);
       } else {
-        console.log(
-          "NO userid or orderid in fetch order reducer -> create new cart "
-        );
-        //else if there is no userId or orderId
         const create = createCart();
         cart = await create(dispatch);
-        console.log(cart, "guest cart in fetch order thunk");
       }
       const action = setCart(cart);
       dispatch(action);
@@ -128,10 +119,8 @@ export const createCart = (
     userId: null,
   }
 ) => {
-  console.log("userInfo in create thunk: ", userInfo);
   return async (dispatch) => {
     try {
-      console.log("HERE in create cart thunk");
       const res = await axios.post("/api/orders/", userInfo);
       const order = res.data;
       dispatch(_createCart(order));

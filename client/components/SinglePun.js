@@ -1,15 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchSinglePun } from "../store/singlePun";
-import { fetchCart, addToCart, createCart } from "../store/order";
+import {
+  fetchUserCart,
+  fetchGuestCart,
+  addToCart,
+  createCart,
+} from "../store/order";
 
 class SinglePun extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: 1
-    }
-    this.handleChange = this.handleChange.bind(this)
+      quantity: 1,
+    };
+    this.handleChange = this.handleChange.bind(this);
     this.addItemToOrder = this.addItemToOrder.bind(this);
   }
 
@@ -18,18 +23,21 @@ class SinglePun extends React.Component {
   }
   handleChange(event) {
     this.setState({
-        [event.target.name]: event.target.value
-    })
+      [event.target.name]: event.target.value,
+    });
   }
-  async addItemToOrder(pun) { //see the same method in all puns compoent for documentation 
-  const { isLoggedIn } = this.props;
+  async addItemToOrder(pun) {
+    //see the same method in all puns compoent for documentation
+    const { isLoggedIn } = this.props;
     if (isLoggedIn) {
-      const userOrder = await this.props.fetchCart(this.props.user, null);
-    }
-  else {
+      const userOrder = await this.props.fetchUserCart(this.props.user);
+    } else {
       const currentGuestOrderId = window.localStorage.getItem("currentOrderId");
-      const guestOrder = await this.props.fetchCart(null, currentGuestOrderId);
-      window.localStorage.setItem("currentOrderId", JSON.stringify(this.props.order.orderId));
+      const guestOrder = await this.props.fetchGuestCart(currentGuestOrderId);
+      window.localStorage.setItem(
+        "currentOrderId",
+        JSON.stringify(this.props.order.orderId)
+      );
     }
     const orderId = this.props.order.orderId;
     await this.props.addToCart(pun.id, orderId, this.state.quantity, pun.price);
@@ -37,17 +45,17 @@ class SinglePun extends React.Component {
   }
 
   render() {
-      const pun = this.props.pun
+    const pun = this.props.pun;
     return (
       <div className="single-pun" key={pun.id}>
         <h2>Pun: {pun.content}</h2>
-        <form  className="update-form" onSubmit={this.addItemToOrder(pun)}>
+        <form className="update-form" onSubmit={this.addItemToOrder(pun)}>
           <select name="quantity" onChange={this.handleChange}>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-          </select >
-          <button type="submit" className="add-to-cart" >
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+          </select>
+          <button type="submit" className="add-to-cart">
             Add to Cart
           </button>
         </form>
@@ -70,7 +78,8 @@ const mapDispatch = (dispatch) => {
     fetchSinglePun: (pun) => dispatch(fetchSinglePun(pun)),
     addToCart: (punId, orderId, qty, price) =>
       dispatch(addToCart(punId, orderId, qty, price)),
-    fetchCart: (userId, orderId) => dispatch(fetchCart(userId, orderId)),
+    fetchUserCart: (userId) => dispatch(fetchUserCart(userId)),
+    fetchGuestCart: (orderId) => dispatch(fetchGuestCart(orderId)),
     createCart: (userInfo) => dispatch(createCart(userInfo)),
   };
 };
