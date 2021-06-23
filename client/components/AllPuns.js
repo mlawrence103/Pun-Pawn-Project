@@ -55,7 +55,7 @@ class AllPuns extends React.Component {
           {this.props.allPuns.map((pun) => (
             <div className="single-pun-in-list" key={pun.id}>
               <Link to={`/puns/${pun.id}`}>
-                <h2>Pun: {pun.content}</h2>
+                <h2>{pun.content}</h2>
               </Link>
               <h5>${pun.price / 100}</h5>
               <button
@@ -66,8 +66,10 @@ class AllPuns extends React.Component {
                 Add to Cart
               </button>
               {this.props.isAdmin ? (
-                <div>
-                  <Link to={`/admin/puns/${pun.id}/edit`}>Edit</Link>
+                <div className="admin-edit-inventory-buttons">
+                  <button>
+                    <Link to={`/admin/puns/${pun.id}/edit`}>Edit</Link>
+                  </button>
                   <DeletePunButton id={pun.id} />
                 </div>
               ) : (
