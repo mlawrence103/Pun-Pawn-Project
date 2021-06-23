@@ -9,6 +9,7 @@ const AdminNavbar = ({handleClick, isAdmin}) => (
     <nav>
           {/* The navbar will show these if an admin is logged in*/}
           <Link to="/all-users">View All Users</Link>
+          <Link to="/admin/addPun">Add New Pun</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
