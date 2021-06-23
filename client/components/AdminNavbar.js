@@ -1,38 +1,38 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { logout } from '../store';
 
-const AdminNavbar = ({handleClick, isAdmin}) => (
+const AdminNavbar = ({ handleClick, isAdmin }) => (
   <div>
-    <h1>FS-App-Template</h1>
+    <h1>Pun Pawn Shop</h1>
     <nav>
-          {/* The navbar will show these if an admin is logged in*/}
-          <Link to="/all-users">View All Users</Link>
-          <Link to="/admin/addPun">Add New Pun</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
+      {/* The navbar will show these if an admin is logged in*/}
+      <Link to="/admin/user-list">View All Users</Link>
+      <Link to="/admin/add-pun">Add New Pun</Link>
+      <a href="#" onClick={handleClick}>
+        Logout
+      </a>
     </nav>
     <hr />
   </div>
-)
+);
 
 /**
  * CONTAINER
  */
-const mapState = state => {
+const mapState = (state) => {
   return {
-    isLoggedIn: !!state.auth.id
-  }
-}
+    isLoggedIn: !!state.auth.id,
+  };
+};
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     handleClick() {
-      dispatch(logout())
-    }
-  }
-}
+      dispatch(logout());
+    },
+  };
+};
 
-export default connect(mapState, mapDispatch)(AdminNavbar)
+export default connect(mapState, mapDispatch)(AdminNavbar);

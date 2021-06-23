@@ -1,14 +1,24 @@
-import React from 'react'
-import Navbar from './components/Navbar'
-import Routes from './Routes'
+import React from 'react';
+import Navbar from './components/Navbar';
+import AdminNavBar from './components/AdminNavbar';
+import { connect } from 'react-redux';
+import Routes from './Routes';
 
-const App = () => {
-  return (
-    <div>
-      <Navbar />
-      <Routes />
-    </div>
-  )
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        {this.props.isAdmin ? <AdminNavBar /> : <Navbar />}
+        <Routes />
+      </div>
+    );
+  }
 }
 
-export default App
+const mapState = (state) => {
+  return {
+    isAdmin: state.auth.userType === 'ADMIN',
+  };
+};
+
+export default connect(mapState)(App);

@@ -5,7 +5,7 @@ import { logout } from '../store';
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
-    <h1>FS-App-Template</h1>
+    <h1>Pun Pawn Shop</h1>
     <nav>
       {isLoggedIn ? (
         <div>
@@ -14,7 +14,6 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
 
           <Link to="/puns">Shop for Puns!</Link>
           <Link to="/checkout">Checkout</Link>
-          <Link to="/admin/addPun">Add New Pun</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
