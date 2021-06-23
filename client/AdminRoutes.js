@@ -6,6 +6,7 @@ import Home from './components/Home';
 import AllUsers from './components/AllUsers';
 import AllPuns from './components/AllPuns';
 import CreatePun from './components/CreatePun';
+import EditPun from './components/EditPun';
 import { me } from './store';
 
 /**
@@ -24,6 +25,7 @@ class Routes extends Component {
           <Route exact path="/admin/add-pun" component={CreatePun} />
           <Route exact path="/admin/user-list" component={AllUsers} />
           <Route exact path="/admin/edit-inventory" component={AllPuns} />
+          <Route exact path="/admin/puns/:id/edit" component={EditPun} />
         </Switch>
       </div>
     );

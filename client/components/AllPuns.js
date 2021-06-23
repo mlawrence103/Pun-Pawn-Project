@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchPuns } from '../store/allPuns';
+import DeletePunButton from './DeletePunButton';
 import {
   fetchUserCart,
   fetchGuestCart,
@@ -50,14 +51,13 @@ class AllPuns extends React.Component {
     return (
       <div>
         <h1>Puns:</h1>
-        <ul className="listAll">
+        <ul className="listAllPuns">
           {this.props.allPuns.map((pun) => (
             <div className="single-pun-in-list" key={pun.id}>
               <Link to={`/puns/${pun.id}`}>
-                <li>
-                  <h2>Pun: {pun.content}</h2>
-                </li>
+                <h2>Pun: {pun.content}</h2>
               </Link>
+              <h5>${pun.price / 100}</h5>
               <button
                 type="submit"
                 className="quick-add-to-cart"
@@ -67,8 +67,8 @@ class AllPuns extends React.Component {
               </button>
               {this.props.isAdmin ? (
                 <div>
-                  <EditPun />
-                  <DeletePun />
+                  <Link to={`/admin/puns/${pun.id}/edit`}>Edit</Link>
+                  <DeletePunButton id={pun.id} />
                 </div>
               ) : (
                 <div />

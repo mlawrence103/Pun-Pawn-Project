@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createPun } from '../store/allPuns';
+import { updatePun, fetchSinglePun } from '../store/singlePun';
 
 class EditPun extends React.Component {
   constructor(props) {
@@ -24,15 +24,21 @@ class EditPun extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.createPun({ ...this.state });
+    this.props.updatePun({ ...this.state });
   }
+
+  async componentDidMount() {
+    const pun = await this.props.fetchPun(this.props.match.params.id);
+    this.setState({ ...this.props.pun });
+  }
+
   render() {
     const { handleChange, handleSubmit } = this;
     const { content, author, price, quantity } = this.state;
     return (
       <div>
         <form onSubmit={handleSubmit} id="create-pun-form">
-          <h3>Add New Pun to Inventory</h3>
+          <h3>Edit Pun</h3>
           <div id="pun-content">
             <label htmlFor="content">
               <small>Content</small>
@@ -84,8 +90,15 @@ class EditPun extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    pun: state.singlePun,
+  };
+};
+
 const mapDispatchToProps = (dispatch, { history }) => ({
-  createPun: (pun) => dispatch(createPun(pun, history)),
+  fetchPun: (id) => dispatch(fetchSinglePun(id)),
+  updatePun: (pun) => dispatch(updatePun(pun, history)),
 });
 
-export default connect(null, mapDispatchToProps)(EditPun);
+export default connect(mapStateToProps, mapDispatchToProps)(EditPun);
