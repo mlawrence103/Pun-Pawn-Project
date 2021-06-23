@@ -29,6 +29,23 @@ router.get('/:orderId', async (req, res, next) => {
   }
 });
 
+//route to get lineItem
+router.get('/:orderId/pun/:punId', async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+    const punId = req.params.punId;
+    const lineItem = await LineItem.findAll({
+      where: {
+        orderId: orderId,
+        punId: punId,
+      },
+    });
+    res.json(lineItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
 //create new order
 router.post('/', async (req, res, next) => {
   console.log('>>>>>>>>>>>>>>>>>>>>HERE IN NEW ORDER POST ROUTE');
@@ -123,6 +140,21 @@ router.delete('/deleteItem', async (req, res, next) => {
   }
 });
 
+//update order total
+router.put('/:id/updateTotal', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.id);
+    const currentTotal = order.total;
+    await order.update({
+      total: currentTotal + req.body.total,
+    });
+    res.sendStatus(202);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//update lineItem quantity
 router.put('/editLineItem', async (req, res, next) => {
   try {
     const { punId, orderId, quantity } = req.body;
@@ -132,8 +164,10 @@ router.put('/editLineItem', async (req, res, next) => {
         orderId: orderId,
       },
     });
+    console.log('editing line item: ', item);
+    const existingQty = item.quantity;
     await item.update({
-      quantity: quantity,
+      quantity: existingQty + quantity,
     });
     res.sendStatus(202);
   } catch (error) {

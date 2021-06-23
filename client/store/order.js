@@ -145,13 +145,37 @@ export const createCart = (
 export const addToCart = (punId, orderId, qty, price) => {
   return async (dispatch) => {
     try {
+      console.log('HERE in add to cart thunk');
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
       const lineItem = { punId, orderId, qty, price };
-      const res = await axios.post('/api/orders/addToCart', lineItem);
+      //add statement here to check if line item exists
+      const existingLineItem = await axios.get(
+        `/api/orders/${orderId}/pun/${punId}`
+      );
+      console.log('existingLineItem: ', existingLineItem.data);
+      await axios.put(`/api/orders/${orderId}/updateTotal`, {
+        total: qty * price,
+      });
+      let res;
+      if (existingLineItem.data.length) {
+        console.log(
+          'This item already exists in this order --> update line item quantity'
+        );
+        res = await axios.put('/api/orders/editLineItem', {
+          punId: punId,
+          orderId: orderId,
+          quantity: qty,
+        });
+      } else {
+        console.log(
+          'create a new line item because item does not exist in this order'
+        );
+        res = await axios.post('/api/orders/addToCart', lineItem);
+      }
       const updatedLineItem = res.data;
-      updatedLineItem['total'] = qty * price;
+      // updatedLineItem['total'] = qty * price;
       dispatch(_addToCart(updatedLineItem));
     } catch (error) {
       console.log('Failed to add item to cart', error);
