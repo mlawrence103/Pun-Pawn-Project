@@ -15,7 +15,32 @@ nav a {
   margin: 1em;
 }
 
-form div {
+/* form div {
   margin: 1em;
   display: inline-block;
+} */
+
+#signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signup-form input,
+#signup-form small {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+#required-signup-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-address-info {
+  display: flex;
+}
+
+#signup-button {
+  margin-top: 1rem;
 }
