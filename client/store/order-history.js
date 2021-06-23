@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+const TOKEN = 'token'
 //action types
 const SET_ORDER_HISTORY = 'SET_ORDER_HISTORY';
 
@@ -13,11 +14,17 @@ export const gotHistoryFromServer = (orders) => ({
 //thunk creator
 export const fetchOrderHistory = (userId) => {
   return async (dispatch) => {
+    console.log('running fetch history thunk')
+    const token = window.localStorage.getItem(TOKEN);
     try {
-      const { data } = await axios.get(`/api/users/${userId}`);
-      dispatch(gotHistoryFromServer(data));
-    } catch (error) {
-      console.log(error);
+        const { data } = await axios.get(`/api/users/${userId}/order-history`, {
+            headers: {
+                authorization: token,
+            }});
+        console.log(`this is the order history data ${data}`)
+        dispatch(gotHistoryFromServer(data));
+    }  catch (error) {
+        console.log(error);
     }
   };
 };
@@ -25,7 +32,7 @@ export const fetchOrderHistory = (userId) => {
 //reducer
 export default function orderHistoryReducer(state = [], action) {
   switch (action.type) {
-    case GOT_PUNS_FROM_SERVER:
+    case SET_ORDER_HISTORY:
       return action.orders;
     default:
       return state;

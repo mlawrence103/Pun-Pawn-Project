@@ -8,6 +8,7 @@ import { me } from './store';
 import AllPuns from './components/AllPuns';
 import SinglePun from './components/SinglePun';
 import Checkout from './components/Checkout';
+import OrderHistory from './components/OrderHistory';
 
 /**
  * COMPONENT
@@ -28,6 +29,7 @@ class Routes extends Component {
             <Route exact path="/puns" component={AllPuns} />
             <Route path="/puns/:id" component={SinglePun} />
             <Route path="/checkout" component={Checkout} />
+            <Route path="/users/order-history" component={OrderHistory} />
             <Redirect to="/home" />
           </Switch>
         ) : (

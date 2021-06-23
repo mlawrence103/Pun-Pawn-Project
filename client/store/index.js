@@ -9,6 +9,7 @@ import singlePunReducer from './singlePun';
 import singleUserReducer from './singleUser';
 
 import auth from './auth';
+import orderHistoryReducer from './order-history';
 
 const reducer = combineReducers({
   auth,
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   singleUser: singleUserReducer,
   allUsers: allUsersReducer,
   order: orderReducer,
+  orders: orderHistoryReducer
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
