@@ -6,6 +6,8 @@ import Signup from './components/Signup';
 import Home from './components/Home';
 import CreatePun from './components/CreatePun';
 import { me } from './store';
+import AllPuns from './components/AllPuns'
+import SinglePun from './components/SignlePun'
 
 /**
  * COMPONENT
@@ -24,13 +26,19 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" component={Home} />
             <Route exact path="/admin/addPun" component={CreatePun} />
+            <Route exact path="/puns" component={AllPuns} />
+            <Route path="/puns/:id" component={SinglePun} />
             <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>
+
             <Route exact path="/" component={Login} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/puns" component={AllPuns} />
+            <Route path="/puns/:id" component={SinglePun} />
+
           </Switch>
         )}
       </div>

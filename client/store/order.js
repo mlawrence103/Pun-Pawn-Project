@@ -1,19 +1,19 @@
-import axios from "axios";
-import history from "../history";
+import axios from 'axios';
+import history from '../history';
 
 //OPEN order = cart
 //action types
-const SET_CART = "SET_CART";
-const CREATE_CART = "CREATE_CART";
-const ADD_TO_CART = "ADD_TO_CART";
-const DELETE_FROM_CART = "DELETE_FROM_CART";
-const EDIT_ITEM_QTY = "EDIT_ITEM_QTY";
-const CHECKOUT_CART = "CHECKOUT_CART";
-const SUBMIT_ORDER = "SUBMIT_ORDER";
+const SET_CART = 'SET_CART';
+const CREATE_CART = 'CREATE_CART';
+const ADD_TO_CART = 'ADD_TO_CART';
+const DELETE_FROM_CART = 'DELETE_FROM_CART';
+const EDIT_ITEM_QTY = 'EDIT_ITEM_QTY';
+const CHECKOUT_CART = 'CHECKOUT_CART';
+const SUBMIT_ORDER = 'SUBMIT_ORDER';
 
 //action creators
 const setCart = (order) => {
-  console.log("order in setCart action: ", order);
+  console.log('order in setCart action: ', order);
   return {
     type: SET_CART,
     order,
@@ -59,47 +59,52 @@ export const fetchCart = (user = null, orderId = null) => {
     try {
       let cart = {};
       if (user) {
-        console.log("LOGGED IN user in fetch order reducer: ", user);
+        console.log('LOGGED IN user in fetch order reducer: ', user);
         const res = await axios.get(`/api/users/${user.id}/cart`);
         cart = res.data;
-        console.log("USER CART in fetch order reducer: ", cart);
+        console.log('USER CART in fetch order reducer: ', cart);
         //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
         if (!cart) {
           const {
-            emailAddress,
+            email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            id,
           } = user;
-          cart = await createCart({
-            emailAddress,
+          const create = createCart({
+            emailAddress: email,
             shippingAddressName,
             shippingAddressStreet,
             shippingAddressCity,
             shippingAddressState,
             shippingAddressZip,
-            userId,
+            userId: id,
           });
+          cart = await create(dispatch);
         }
       } else if (orderId) {
-        console.log("ORDER ID in fetch order reducer: ", orderId);
-        cart = await axios.get(`/api/orders/${orderId}`).data;
+        console.log('type of order id: ', typeof orderId);
+        console.log('ORDER ID in fetch order reducer: ', orderId);
+        const { data } = await axios.get(`/api/orders/${orderId}`);
+        console.log('data returned from get by orderId req: ', data);
+        cart = data;
+        console.log('GUEST CART with open order: ', cart);
       } else {
         console.log(
-          "NO userid or orderid in fetch order reducer -> create new cart "
+          'NO userid or orderid in fetch order reducer -> create new cart '
         );
         //else if there is no userId or orderId
         const create = createCart();
         cart = await create(dispatch);
-        console.log(cart, "guest cart in fetch order thunk");
+        console.log(cart, 'guest cart in fetch order thunk');
       }
       const action = setCart(cart);
       dispatch(action);
     } catch (error) {
-      console.log("Cannot find cart", error);
+      console.log('Cannot find cart', error);
     }
   };
 };
@@ -112,38 +117,39 @@ export const createCart = (
     shippingAddressCity: null,
     shippingAddressState: null,
     shippingAddressZip: null,
+    userId: null,
   }
 ) => {
-  console.log("userInfo in create thunk: ", userInfo);
+  console.log('userInfo in create thunk: ', userInfo);
   return async (dispatch) => {
     try {
-      console.log("HERE in create cart thunk");
-      const res = await axios.post("/api/orders/", userInfo);
+      console.log('HERE in create cart thunk');
+      const res = await axios.post('/api/orders/', userInfo);
       const order = res.data;
       dispatch(_createCart(order));
-      return order
+      return order;
     } catch (error) {
-      console.log("Failed to create a new order", error);
+      console.log('Failed to create a new order', error);
     }
   };
 };
 
 export const addToCart = (punId, orderId, qty, price) => {
-  console.log("HERE in add to cart thunk");
-  console.log("arguments: ", punId, orderId, qty, price);
+  console.log('HERE in add to cart thunk');
+  console.log('arguments: ', punId, orderId, qty, price);
   return async (dispatch) => {
     try {
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
       const lineItem = { punId, orderId, qty, price };
-      console.log(lineItem, "line item in add to cart");
-      const res = await axios.post("/api/orders/addToCart", lineItem);
+      console.log(lineItem, 'line item in add to cart');
+      const res = await axios.post('/api/orders/addToCart', lineItem);
       const updatedLineItem = res.data;
-      updatedLineItem["total"] = qty * price;
+      updatedLineItem['total'] = qty * price;
       dispatch(_addToCart(updatedLineItem));
     } catch (error) {
-      console.log("Failed to add item to cart", error);
+      console.log('Failed to add item to cart', error);
     }
   };
 };
@@ -153,12 +159,12 @@ export const deleteFromCart = (punId, orderId) => {
     const requestBody = { punId, orderId };
     try {
       const { data: pun } = await axios.delete(
-        "/api/orders/deleteItem",
+        '/api/orders/deleteItem',
         requestBody
       );
       dispatch(_deleteFromCart(pun));
     } catch (error) {
-      console.log("Unable to remove item from cart", error);
+      console.log('Unable to remove item from cart', error);
     }
   };
 };
@@ -167,12 +173,12 @@ export const editItemQty = (punId, orderId, qty, price) => {
   return async (dispatch) => {
     try {
       const lineItem = { punId: punId, orderId: orderId, quantity: qty };
-      const res = await axios.put("/api/orders/editLineItem", lineItem);
+      const res = await axios.put('/api/orders/editLineItem', lineItem);
       const updatedLineItem = res.data;
-      updatedLineItem["total"] = qty * price;
+      updatedLineItem['total'] = qty * price;
       dispatch(_editItemQty(updatedLineItem));
     } catch (error) {
-      console.log("Failed to edit cart", error);
+      console.log('Failed to edit cart', error);
     }
   };
 };
@@ -184,7 +190,7 @@ export const checkoutCart = (order) => {
       const { data } = await axios.put(`/${order.id}/checkout`, order);
       dispatch(_checkoutCart(data));
     } catch (error) {
-      console.log("Unable to update checkout information", error);
+      console.log('Unable to update checkout information', error);
     }
   };
 };
@@ -196,7 +202,7 @@ export const submitOrder = (order) => {
       const { data } = await axios.put(`/${order.id}/submit`, order);
       dispatch(_submitOrder(data));
     } catch (error) {
-      console.log("Unable to process checkout", error);
+      console.log('Unable to process checkout', error);
     }
   };
 };
@@ -209,10 +215,10 @@ export default function orderReducer(state = initialState, action) {
     case SET_CART:
       return action.order;
     case CREATE_CART:
-      console.log("in create cart reducer");
+      console.log('in create cart reducer');
       return action.order;
     case ADD_TO_CART:
-      console.log("in add to cart reducer");
+      console.log('in add to cart reducer');
       return action.order;
     case DELETE_FROM_CART:
       return action.order;
