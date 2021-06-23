@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchPuns } from "../store/allPuns";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchPuns } from '../store/allPuns';
 import {
   fetchUserCart,
   fetchGuestCart,
   addToCart,
   createCart,
-} from "../store/order";
+} from '../store/order';
 
 class AllPuns extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class AllPuns extends React.Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log('componentDidMount');
     this.props.fetchPuns();
   }
 
@@ -31,13 +31,13 @@ class AllPuns extends React.Component {
     //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
     else {
       const currentGuestOrderId = parseInt(
-        window.localStorage.getItem("currentOrderId")
+        window.localStorage.getItem('currentOrderId')
       );
       //if there's no currentGuestOrderId in local storage, it will be undefined which will cause fetchCart to create a new cart
       //possibly need to JSON.parse currentOrderId
       const guestOrder = await this.props.fetchGuestCart(currentGuestOrderId);
       window.localStorage.setItem(
-        "currentOrderId",
+        'currentOrderId',
         JSON.stringify(this.props.order.id)
       );
     }
@@ -65,6 +65,14 @@ class AllPuns extends React.Component {
               >
                 Add to Cart
               </button>
+              {this.props.isAdmin ? (
+                <div>
+                  <EditPun />
+                  <DeletePun />
+                </div>
+              ) : (
+                <div />
+              )}
             </div>
           ))}
         </ul>
@@ -79,6 +87,7 @@ const mapState = (state) => {
     isLoggedIn: !!state.auth.id,
     user: state.auth,
     order: state.order,
+    isAdmin: state.auth.userType === 'ADMIN',
   };
 };
 
