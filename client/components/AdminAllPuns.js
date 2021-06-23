@@ -28,7 +28,7 @@ class AdminAllPuns extends React.Component {
         <ul className="listAllPuns">
           {this.props.allPuns.map((pun) => (
             <div className="single-pun-in-list" key={pun.id}>
-              <Link to={`/puns/${pun.id}`}>
+              <Link to={`/admin/puns/${pun.id}/edit`}>
                 <h2>{pun.content}</h2>
               </Link>
               <h5>${pun.price / 100}</h5>
