@@ -16,6 +16,11 @@ class OrderHistory extends React.Component {
           {this.props.orders ? (this.props.orders.map((order) => (
             <div className="order-in-history" key={order.id}>
                 <h4>order number {order.id}</h4>
+                <ul>
+                  {order.puns.map((pun)=>(
+                    <li key={pun.id}>{pun.content}</li>
+                  ))}
+                </ul>
             </div>
           ))) : (<h1>no orders to show</h1>)}
         </ul>
