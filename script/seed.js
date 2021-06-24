@@ -872,27 +872,22 @@ async function seed() {
     shippingAddressCity: "New York City",
     shippingAddressState: "NY",
     shippingAddressZip: "10036",
-    total: 25,
   });
 
   const order2 = await Order.create({
     status: "fulfilled",
-    total: 555,
   });
 
   const order3 = await Order.create({
     status: "fulfilled",
-    total: 465,
   });
 
   const order4 = await Order.create({
     status: "fulfilled",
-    total: 405,
   });
 
   const order5 = await Order.create({
     status: "open",
-    total: 700,
   });
 
   await order1.addPun(pun1);
