@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deletePun } from '../store/AllPuns';
+import { deletePun } from '../store/allPuns';
 
 class DeletePunButton extends React.Component {
   constructor(props) {
