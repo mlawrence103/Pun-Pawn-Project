@@ -16,7 +16,6 @@ class AllPuns extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     this.props.fetchPuns();
   }
 
@@ -27,16 +26,10 @@ class AllPuns extends React.Component {
     //check if user is logged in, and try to get that user's open cart. if there's not an open cart associated with that user, then create a new cart in the fetchCart thunk
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
-      console.log(
-        'LOGGED IN USER in add item to cart event handler',
-        this.props.user
-      );
       const userOrder = await this.props.fetchUserCart(this.props.user);
-      console.log('user order: ', userOrder);
     }
     //if user is not logged in, check to see if there's an order in local storage or in state. if not, create a new order and store it in state
     else {
-      console.log('GUEST in add item to cart event handler');
 
       const currentGuestOrderId = parseInt(
         window.localStorage.getItem('currentOrderId')
@@ -45,8 +38,6 @@ class AllPuns extends React.Component {
 
       //possibly need to JSON.parse currentOrderId
       const guestOrder = await this.props.fetchGuestCart(currentGuestOrderId);
-
-      console.log('guest order', this.props.order);
       window.localStorage.setItem(
         'currentOrderId',
         JSON.stringify(this.props.order.id)
@@ -54,22 +45,7 @@ class AllPuns extends React.Component {
     }
     //then add item to order that is now in local storage
     const orderId = this.props.order.id;
-    console.log(pun, '= pun to add to cart');
-    console.log(orderId, '= order id');
-    console.log(
-      'arguments in add to cart in component: ',
-      pun.id,
-      '= pun.id',
-      orderId,
-      '= order id',
-      1,
-      '= quantity',
-      pun.price,
-      '= price'
-    );
-
     await this.props.addToCart(pun.id, orderId, 1, pun.price);
-    console.log('this.props ', this.props);
   }
 
   render() {

@@ -11,7 +11,6 @@ const {
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log("db synced!");
 
   const user1 = await User.create({
     firstName: "Brenda",

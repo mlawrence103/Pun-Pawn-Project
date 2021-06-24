@@ -16,7 +16,6 @@ export class OpenOrder extends React.Component {
 
   async componentDidMount() {
     try {
-      console.log("component did mount");
       await this.props.loadCart();
     } catch (error) {
       console.log(error);

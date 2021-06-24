@@ -33,11 +33,10 @@ router.get("/:id", adminOrSelf, async (req, res, next) => {
 
 //get open order by userId
 router.get("/:id/cart", adminOrSelf, async (req, res, next) => {
-  console.log("Here in get cart by user id route");
   try {
     //make sure have requireToken
     const userId = req.params.id;
-    console.log(req.params.id, "req.params");
+    .log(req.params.id, "req.params");
     //add eager loading to include where items' order id matches
     const order = await Order.findOne({
       where: { userId: userId, status: "open" },
@@ -54,18 +53,13 @@ router.get("/:id/cart", adminOrSelf, async (req, res, next) => {
 });
 
 router.get("/:id/order-history", adminOrSelf, async (req, res, next) => {
-  console.log(
-    `>>>>>>>/api/users/${req.params.id}/order-history<<<<<<<<<<<<<<<<`
-  );
+
   try {
     const userId = req.params.id;
     const response = await Order.findAll({
       where: { userId: userId },
       include: [{ model: Pun }],
     });
-    console.log(
-      `>>>>>>>>>>>>>>>this is the order history ${response}<<<<<<<<<<<<<<<<`
-    );
     console.dir(response);
     res.send(response);
   } catch (err) {

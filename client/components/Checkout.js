@@ -63,7 +63,6 @@ export class Checkout extends React.Component {
       shippingState,
       shippingZip,
     } = this.state;
-    console.log('state in save shipping: ', this.state);
     if (
       email.length &&
       shippingName.length &&

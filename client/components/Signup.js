@@ -333,7 +333,6 @@ const mapDispatch = (dispatch) => {
       const lastName = evt.target.lastName.value;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
-      console.log('firstName: ', firstName);
       dispatch(authenticate(firstName, lastName, email, password, formName));
     },
   };

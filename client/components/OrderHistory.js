@@ -4,7 +4,6 @@ import { fetchOrderHistory } from '../store/order-history';
 
 class OrderHistory extends React.Component {
   componentDidMount() {
-    console.log(this.props.userId)  
     this.props.fetchOrderHistory(this.props.userId)
     }
 

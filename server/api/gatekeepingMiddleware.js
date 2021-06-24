@@ -6,9 +6,7 @@ const {
 
 const requireToken = async (req, res, next) => {
   try {
-    console.log('>>>>>>>>> require token middleware');
     const token = req.headers.authorization;
-    console.log('token: ', token);
     const user = await User.findByToken(token);
     req.user = user;
     next();
@@ -20,7 +18,6 @@ const requireToken = async (req, res, next) => {
 //if we get past require token, we can guarantee that we have a user, but we want to check if user has admin permissions
 const isAdmin = async (req, res, next) => {
   try {
-    console.log('>>>>>>>>> is admin middleware');
     const token = req.headers.authorization;
     const user = await User.findByToken(token);
     req.user = user;
