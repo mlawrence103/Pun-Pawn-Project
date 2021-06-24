@@ -23,9 +23,6 @@ class LineItem extends React.Component {
   }
 
   handleDelete(punId, orderId) {
-    console.log(
-      `in handle delete line item with punId: ${punId} and orderId: ${orderId}`
-    );
     this.props.deleteLineItem(punId, orderId);
   }
 

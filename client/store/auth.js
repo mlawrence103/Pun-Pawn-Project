@@ -30,14 +30,6 @@ export const me = () => async (dispatch) => {
 
 export const authenticate =
   (firstName, lastName, email, password, method) => async (dispatch) => {
-    console.log(
-      'HERE in authenticate thunk: ',
-      firstName,
-      lastName,
-      email,
-      password,
-      method
-    );
     try {
       let res;
       if (method === 'signup') {

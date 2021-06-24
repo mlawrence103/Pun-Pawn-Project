@@ -15,7 +15,6 @@ const SUBMIT_ORDER = 'SUBMIT_ORDER';
 
 //action creators
 const setCart = (order) => {
-  console.log('order in setCart action: ', order);
   return {
     type: SET_CART,
     order,
@@ -57,7 +56,6 @@ const _submitOrder = (order) => ({
 
 //this is called when we have a logged in user
 export const fetchUserCart = (user) => {
-  console.log('in fetch user cart thunk with user id: ', user.id);
   return async (dispatch) => {
     try {
       const token = window.localStorage.getItem(TOKEN);
@@ -69,7 +67,6 @@ export const fetchUserCart = (user) => {
       let cart = res.data;
       //if user is logged in, but doesn't have a cart (open order), then create a new cart with relevant userInfo
       if (!cart) {
-        console.log('User does NOT have open order -> create new order');
         const {
           email,
           shippingAddressName,
@@ -100,14 +97,12 @@ export const fetchUserCart = (user) => {
 };
 
 export const fetchGuestCart = (orderId = null) => {
-  console.log('in fetch guest cart with orderId: ', orderId);
   return async (dispatch) => {
     try {
       let cart = {};
       if (orderId) {
         const { data } = await axios.get(`/api/orders/${orderId}`);
         cart = data;
-        console.log('in fetch guest cart thunk with cart: ', cart);
       } else {
         //else if there is no userId or orderId
         const create = createCart();
@@ -147,7 +142,6 @@ export const createCart = (
 export const addToCart = (punId, orderId, qty, price) => {
   return async (dispatch) => {
     try {
-      console.log('HERE in add to cart thunk');
       //have something check to see if item is already in the order, and then in that case edit the line item quantity instead of adding a new line item
       //check global state or another axios request?
       //can we directly access state through the store?
@@ -156,7 +150,6 @@ export const addToCart = (punId, orderId, qty, price) => {
       const existingLineItem = await axios.get(
         `/api/orders/${orderId}/pun/${punId}`
       );
-      console.log('existingLineItem: ', existingLineItem.data);
       await axios.put(`/api/orders/${orderId}/updateTotal`, {
         total: qty * price,
       });
@@ -171,9 +164,6 @@ export const addToCart = (punId, orderId, qty, price) => {
           quantity: qty,
         });
       } else {
-        console.log(
-          'create a new line item because item does not exist in this order'
-        );
         res = await axios.post('/api/orders/addToCart', lineItem);
       }
       const updatedLineItem = res.data;
@@ -247,10 +237,8 @@ export default function orderReducer(state = initialState, action) {
     case SET_CART:
       return action.order;
     case CREATE_CART:
-      console.log('in create cart reducer');
       return action.order;
     case ADD_TO_CART:
-      console.log('in add to cart reducer');
       return action.order;
     case DELETE_FROM_CART:
       return action.order;

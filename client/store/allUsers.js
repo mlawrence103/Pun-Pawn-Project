@@ -41,7 +41,6 @@ export const updateUser = (user) => {
 //THUNK CREATORS
 
 export const fetchUsers = () => {
-  console.log("fetch users is being called");
   return async (dispatch) => {
     try {
       const token = window.localStorage.getItem(TOKEN);
@@ -86,7 +85,6 @@ export const updatingUser = (id, user) => {
 };
 
 export const editUserType = (id, type) => {
-  console.log("id", id, "type", type);
   return async (dispatch) => {
     try {
       const { data } = await axios.put(`/api/users/${id}/editUserType`, {

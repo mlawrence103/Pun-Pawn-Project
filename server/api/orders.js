@@ -108,7 +108,6 @@ router.post("/", async (req, res, next) => {
 //**OPEN ORDER ROUTES */
 
 router.post("/addToCart", async (req, res, next) => {
-  console.log("reached add to cart API route");
   try {
     const { punId, orderId, qty, price } = req.body;
     const lineItem = await LineItem.create({
@@ -162,7 +161,6 @@ router.put("/editLineItem", async (req, res, next) => {
         orderId: orderId,
       },
     });
-    console.log("editing line item: ", item);
     const existingQty = item.quantity;
     await item.update({
       quantity: existingQty + quantity,
