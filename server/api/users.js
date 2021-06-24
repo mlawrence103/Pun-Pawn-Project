@@ -36,7 +36,6 @@ router.get("/:id/cart", adminOrSelf, async (req, res, next) => {
   try {
     //make sure have requireToken
     const userId = req.params.id;
-    .log(req.params.id, "req.params");
     //add eager loading to include where items' order id matches
     const order = await Order.findOne({
       where: { userId: userId, status: "open" },
