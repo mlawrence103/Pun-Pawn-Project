@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import { authenticate } from "../store";
+import React from 'react';
+import { connect } from 'react-redux';
+import { authenticate } from '../store';
 
 /**
  * COMPONENT
@@ -9,37 +9,23 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      shippingName: "",
-      shippingStreet: "",
-      shippingCity: "",
-      shippingState: "",
-      shippingZip: "",
-      billingName: "",
-      billingStreet: "",
-      billingCity: "",
-      billingState: "",
-      billingZip: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      shippingName: '',
+      shippingStreet: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingZip: '',
+      billingName: '',
+      billingStreet: '',
+      billingCity: '',
+      billingState: '',
+      billingZip: '',
     };
-    // this.selectShippingState = this.selectShippingState.bind(this);
-    // this.selectBillingState = this.selectBillingState.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-
-  // selectShippingState(event) {
-  //   this.setState({
-  //     shippingState: parseInt(event.target.value),
-  //   });
-  // }
-
-  // selectBillingState(event) {
-  //   this.setState({
-  //     billingState: parseInt(event.target.value),
-  //   });
-  // }
 
   handleChange(event) {
     this.setState({
@@ -126,24 +112,39 @@ class Signup extends React.Component {
                   <label htmlFor="shippingName">
                     <small>Name</small>
                   </label>
-                  <input name="shippingName" type="text" />
+                  <input
+                    name="shippingName"
+                    type="text"
+                    onChange={handleChange}
+                    value={shippingName}
+                  />
                 </div>
                 <label htmlFor="shippingStreet">
                   <small>Street</small>
                 </label>
-                <input name="shippingStreet" type="text" />
+                <input
+                  name="shippingStreet"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingStreet}
+                />
               </div>
               <div>
                 <label htmlFor="shippingCity">
                   <small>City</small>
                 </label>
-                <input name="shippingCity" type="text" />
+                <input
+                  name="shippingCity"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingCity}
+                />
               </div>
               <div id="shippingDropdown">
                 <label htmlFor="shippingState">
                   <small>State:</small>
                 </label>
-                <select name="shippingState" onChange={this.selectShppingState}>
+                <select name="shippingState" onChange={this.handleChange}>
                   <option value="none" selected disabled hidden>
                     Select State
                   </option>
@@ -160,7 +161,12 @@ class Signup extends React.Component {
                 <label htmlFor="shippingZip">
                   <small>Zip Code</small>
                 </label>
-                <input name="shippingZip" type="text" />
+                <input
+                  name="shippingZip"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingZip}
+                />
               </div>
             </div>
 
@@ -171,24 +177,39 @@ class Signup extends React.Component {
                   <label htmlFor="billingName">
                     <small>Name</small>
                   </label>
-                  <input name="billingName" type="text" />
+                  <input
+                    name="billingName"
+                    type="text"
+                    onChange={handleChange}
+                    value={billingName}
+                  />
                 </div>
                 <label htmlFor="billingStreet">
                   <small>Street</small>
                 </label>
-                <input name="billingStreet" type="text" />
+                <input
+                  name="billingStreet"
+                  type="text"
+                  onChange={handleChange}
+                  value={billingStreet}
+                />
               </div>
               <div>
                 <label htmlFor="billingCity">
                   <small>City</small>
                 </label>
-                <input name="billingCity" type="text" />
+                <input
+                  name="billingCity"
+                  type="text"
+                  onChange={handleChange}
+                  value={billingCity}
+                />
               </div>
               <div id="billingDropdown">
                 <label htmlFor="billingState">
                   <small>State:</small>
                 </label>
-                <select name="billingState" onChange={this.selectBillingState}>
+                <select name="billingState" onChange={handleChange}>
                   <option value="none" selected disabled hidden>
                     Select State
                   </option>
@@ -205,7 +226,12 @@ class Signup extends React.Component {
                 <label htmlFor="billingZip">
                   <small>Zip Code</small>
                 </label>
-                <input name="billingZip" type="text" />
+                <input
+                  name="billingZip"
+                  type="text"
+                  onChange={handleChange}
+                  value={billingZip}
+                />
               </div>
             </div>
             <div>
@@ -233,65 +259,65 @@ const mapSignup = (state) => {
   return {
     error: state.auth.error,
     states: [
-      "AL",
-      "AK",
-      "AS",
-      "AZ",
-      "AR",
-      "CA",
-      "CO",
-      "CT",
-      "DE",
-      "DC",
-      "FM",
-      "FL",
-      "GA",
-      "GU",
-      "HI",
-      "ID",
-      "IL",
-      "IN",
-      "IA",
-      "KS",
-      "KY",
-      "LA",
-      "ME",
-      "MH",
-      "MD",
-      "MA",
-      "MI",
-      "MN",
-      "MS",
-      "MO",
-      "MT",
-      "NE",
-      "NV",
-      "NH",
-      "NJ",
-      "NM",
-      "NY",
-      "NC",
-      "ND",
-      "MP",
-      "OH",
-      "OK",
-      "OR",
-      "PW",
-      "PA",
-      "PR",
-      "RI",
-      "SC",
-      "SD",
-      "TN",
-      "TX",
-      "UT",
-      "VT",
-      "VI",
-      "VA",
-      "WA",
-      "WV",
-      "WI",
-      "WY",
+      'AL',
+      'AK',
+      'AS',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'DC',
+      'FM',
+      'FL',
+      'GA',
+      'GU',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MH',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'MP',
+      'OH',
+      'OK',
+      'OR',
+      'PW',
+      'PA',
+      'PR',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VI',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY',
     ],
   };
 };
@@ -302,12 +328,12 @@ const mapDispatch = (dispatch) => {
   return {
     handleSubmit(evt) {
       evt.preventDefault();
-      const formName = "signup";
+      const formName = 'signup';
       const firstName = evt.target.firstName.value;
       const lastName = evt.target.lastName.value;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
-      console.log("firstName: ", firstName);
+      console.log('firstName: ', firstName);
       dispatch(authenticate(firstName, lastName, email, password, formName));
     },
   };

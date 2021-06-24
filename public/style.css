@@ -40,6 +40,7 @@ nav a {
 
 .signup-address-info {
   display: flex;
+  flex-direction: column;
 }
 
 #signup-button {
