@@ -54,18 +54,16 @@ router.get('/:id/cart', adminOrSelf, async (req, res, next) => {
 });
 
 router.get('/:id/order-history', adminOrSelf, async (req, res, next) => {
+  console.log(`>>>>>>>/api/users/${req.params.id}/order-history<<<<<<<<<<<<<<<<`)
   try {
     const userId = req.params.id;
-    const response = await User.findAll({
+    const response = await Order.findAll({
       where: { userId: userId },
-      include: [
-        {
-          model: Pun,
-        },
-      ],
+      include: [{model:Pun }]
     });
-    console.log(`this is the order history ${response}`);
-    res.send(response.data);
+    console.log(`>>>>>>>>>>>>>>>this is the order history ${response}<<<<<<<<<<<<<<<<`);
+    console.dir(response)
+    res.send(response);
   } catch (err) {
     next(err);
   }

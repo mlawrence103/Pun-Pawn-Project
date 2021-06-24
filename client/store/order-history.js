@@ -14,14 +14,15 @@ export const gotHistoryFromServer = (orders) => ({
 //thunk creator
 export const fetchOrderHistory = (userId) => {
   return async (dispatch) => {
-    console.log('running fetch history thunk')
+    console.log(`running fetch history thunk for user ${userId}`)
     const token = window.localStorage.getItem(TOKEN);
     try {
-        const { data } = await axios.get(`/api/users/${userId}/order-history`, {
+        const {data}= await axios.get(`/api/users/${userId}/order-history`, {
             headers: {
                 authorization: token,
             }});
-        console.log(`this is the order history data ${data}`)
+        console.log(`this is the order history data`)
+        console.dir(data)
         dispatch(gotHistoryFromServer(data));
     }  catch (error) {
         console.log(error);
