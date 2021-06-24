@@ -875,13 +875,31 @@ async function seed() {
   });
 
   const order2 = await Order.create({
+    status: "fulfilled",
+  });
+
+  const order3 = await Order.create({
+    status: "fulfilled",
+  });
+
+  const order4 = await Order.create({
+    status: "fulfilled",
+  });
+
+  const order5 = await Order.create({
     status: "open",
   });
 
   await order1.addPun(pun1);
   await order2.addPuns([pun2, pun3, pun4]);
+  await order3.addPuns([pun5, pun6, pun7, pun8]);
+  await order4.addPuns([pun28, pun93]);
+  await order5.addPuns([pun102, pun72, pun47]);
   await user1.addOrder(order1);
   await user2.addOrder(order2);
+  await user2.addOrder(order3);
+  await user2.addOrder(order4);
+  await user2.addOrder(order5);
 }
 
 /*
