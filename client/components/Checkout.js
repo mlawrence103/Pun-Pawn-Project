@@ -8,6 +8,7 @@ import { fetchUser, updatingAccount } from '../store/singleUser';
 // -shipping info form (pre-populated for user, not for guest) (check user reducer)
 // -billing info form (pre-populated for user, not for guest) (check user reducer)
 export class Checkout extends React.Component {
+  debugger 
   constructor() {
     super();
     this.state = {
@@ -28,23 +29,18 @@ export class Checkout extends React.Component {
     this.saveShipping = this.saveShipping.bind(this);
   }
 
-  async componentDidMount() {
-    try {
+  componentDidMount() {
+    console.log('in component did mount')
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
-        // console.log('user is logged in in checkout');
-        await this.props.loadUserCart();
-        await this.props.loadUserInfo();
+        this.props.loadUserCart(this.props.userId);
+        this.props.loadUserInfo(this.props.userId);
       } else {
         const currentGuestOrderId = parseInt(
           window.localStorage.getItem('currentOrderId')
         );
-        // console.log('guest in checkout with id: ', currentGuestOrderId);
-        await this.props.loadGuestCart(currentGuestOrderId);
+        this.props.loadGuestCart(currentGuestOrderId);
       }
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   handleChange(e) {
@@ -274,7 +270,7 @@ const mapState = (state) => {
   return {
     singleUser: state.singleUser,
     order: state.order,
-    isLoggedIn: !!state.auth.id,
+    isLoggedIn: !!state.auth.userId,
     states: [
       'AL',
       'AK',

@@ -26,8 +26,8 @@ class SinglePun extends React.Component {
       [event.target.name]: event.target.value,
     });
   }
-  async addItemToOrder(pun) {
-    //see the same method in all puns compoent for documentation
+  addItemToOrder = async (event) => {
+    event.preventdefault()
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
       const userOrder = await this.props.fetchUserCart(this.props.user);
@@ -40,7 +40,7 @@ class SinglePun extends React.Component {
       );
     }
     const orderId = this.props.order.orderId;
-    await this.props.addToCart(pun.id, orderId, this.state.quantity, pun.price);
+    await this.props.addToCart(this.props.pun.id, orderId, this.state.quantity, pun.price);
     console.log("this.props.order: ", this.props.order);
   }
 
@@ -49,7 +49,7 @@ class SinglePun extends React.Component {
     return (
       <div className="single-pun" key={pun.id}>
         <h2>Pun: {pun.content}</h2>
-        <form className="update-form" onSubmit={this.addItemToOrder(pun)}>
+        <form className="update-form" onSubmit={this.addItemToOrder}>
           <select name="quantity" onChange={this.handleChange}>
             <option value={1}>1</option>
             <option value={2}>2</option>

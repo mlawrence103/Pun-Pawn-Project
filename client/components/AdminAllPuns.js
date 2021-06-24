@@ -16,12 +16,10 @@ class AdminAllPuns extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     this.props.fetchPuns();
   }
 
   render() {
-    console.log("AdminAllPuns")
     return (
       <div>
         <h1>Puns:</h1>
