@@ -22,7 +22,6 @@ router.get('/:orderId', async (req, res, next) => {
         },
       ],
     });
-    console.log('!!!!!!******order in get by orderId route: ', order);
     res.json(order);
   } catch (error) {
     next(error);
@@ -48,7 +47,6 @@ router.get('/:orderId/pun/:punId', async (req, res, next) => {
 
 //create new order
 router.post('/', async (req, res, next) => {
-  console.log('>>>>>>>>>>>>>>>>>>>>HERE IN NEW ORDER POST ROUTE');
   try {
     //make sure getting proper order instance from store
     const {
@@ -146,7 +144,7 @@ router.put('/:id/updateTotal', async (req, res, next) => {
     const order = await Order.findByPk(req.params.id);
     const currentTotal = order.total;
     await order.update({
-      total: currentTotal + req.body.total,
+      total: (currentTotal + req.body.total) / 100,
     });
     res.sendStatus(202);
   } catch (error) {

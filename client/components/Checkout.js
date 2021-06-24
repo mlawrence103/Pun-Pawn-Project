@@ -11,35 +11,36 @@ export class Checkout extends React.Component {
   constructor() {
     super();
     this.state = {
-      shippingAddressName: '',
-      shippingAddressStreet: '',
-      shippingAddressCity: '',
-      shippingAddressState: '',
-      shippingAddressZip: '',
-      billingAddressName: '',
-      billingAddressStreet: '',
-      billingAddressCity: '',
-      billingAddressState: '',
-      billingAddressZip: '',
+      showBillingForm: false,
+      email: '',
+      shippingName: '',
+      shippingStreet: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingZip: '',
+      billingName: '',
+      billingStreet: '',
+      billingCity: '',
+      billingState: '',
+      billingZip: '',
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.saveShipping = this.saveShipping.bind(this);
   }
 
   async componentDidMount() {
     try {
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
-        console.log('user is logged in in checkout');
+        // console.log('user is logged in in checkout');
         await this.props.loadUserCart();
         await this.props.loadUserInfo();
       } else {
         const currentGuestOrderId = parseInt(
           window.localStorage.getItem('currentOrderId')
         );
-        console.log('guest in checkout with id: ', currentGuestOrderId);
+        // console.log('guest in checkout with id: ', currentGuestOrderId);
         await this.props.loadGuestCart(currentGuestOrderId);
-        console.log('GUEST CART in checkout: ', this.props.order);
       }
     } catch (error) {
       console.log(error);
@@ -52,30 +53,51 @@ export class Checkout extends React.Component {
     });
   }
 
-  handleSubmit(e) {
+  saveShipping(e) {
     e.preventDefault();
     this.props.updateOrderInfo(this.props.order);
     //billing info is only associated with user; should we include it in an order?
     // otherwise we are just going to update it from user info
     // this.props.userInfo(this.props.singleUser.this.props.singleUser)
-    this.setState({
-      shippingAddressName: '',
-      shippingAddressStreet: '',
-      shippingAddressCity: '',
-      shippingAddressState: '',
-      shippingAddressZip: '',
-      billingAddressName: '',
-      billingAddressStreet: '',
-      billingAddressCity: '',
-      billingAddressState: '',
-      billingAddressZip: '',
-    });
+    const {
+      email,
+      shippingName,
+      shippingStreet,
+      shippingCity,
+      shippingState,
+      shippingZip,
+    } = this.state;
+    console.log('state in save shipping: ', this.state);
+    if (
+      email.length &&
+      shippingName.length &&
+      shippingStreet.length &&
+      shippingCity.length &&
+      shippingState.length &&
+      shippingZip.length
+    ) {
+      this.setState({ showBillingForm: true });
+    }
   }
 
   render() {
     // console.log(this.state, 'state in checkout');
     // console.log(this.props, 'props in checkout');
     const puns = this.props.order.puns || [];
+    const { handleChange } = this;
+    const {
+      email,
+      shippingName,
+      shippingStreet,
+      shippingCity,
+      shippingState,
+      shippingZip,
+      billingName,
+      billingStreet,
+      billingCity,
+      billingState,
+      billingZip,
+    } = this.state;
     return (
       <div>
         <h1>Checkout</h1>
@@ -83,85 +105,164 @@ export class Checkout extends React.Component {
           <h1>Cart</h1>
           {puns.map((lineItem) => {
             return (
-              <div className="cart-item" key={lineItem.punId}>
+              <div
+                className="cart-item"
+                key={lineItem.punId + Math.ceil(Math.random()) * 1000}
+              >
                 <h4>{lineItem.content}</h4>
-                <h5>${lineItem.price}</h5>
-                <h5>Quantity: {lineItem.quantity}</h5>
+                <h5>Quantity:</h5>
+                <input
+                  name="quantity"
+                  type="text"
+                  onChange={handleChange}
+                  value={lineItem.quantity}
+                />
+                <h5>${lineItem.price / 100}</h5>
+                <button>Remove</button>
               </div>
             );
           })}
-          <h3>Total: ${this.props.order.total}</h3>
+          <h3>Total: ${this.props.order.total / 100}</h3>
         </div>
         <div>
-          <h1>Shipping Info</h1>
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="shippingAddressName">Name: </label>
-            <input
-              name="shippingAddressName"
-              onChange={this.handleChange}
-              value={this.props.singleUser.shippingAddressName}
-            />
-            <label htmlFor="shippingAddressStreet">Street Address: </label>
-            <input
-              name="shippingAddressStreet"
-              onChange={this.handleChange}
-              value={this.props.singleUser.shippingAddressStreet}
-            />
-            <label htmlFor="shippingAddressCity">City: </label>
-            <input
-              name="shippingAddressCity"
-              onChange={this.handleChange}
-              value={this.props.singleUser.shippingAddressCity}
-            />
-            <label htmlFor="shippingAddressState">State: </label>
-            <input
-              name="shippingAddressCity"
-              onChange={this.handleChange}
-              value={this.props.singleUser.shippingAddressCity}
-            />
-            <label htmlFor="shippingAddressZip">Zip Code: </label>
-            <input
-              name="shippingAddressZip"
-              onChange={this.handleChange}
-              value={this.props.singleUser.shippingAddressZip}
-            />
+          <form onSubmit={this.saveShipping}>
+            <h5>Shipping Info</h5>
+            <div className="signup-address-info">
+              <div>
+                <div>
+                  <label htmlFor="shippingName">
+                    <small>Name</small>
+                  </label>
+                  <input
+                    name="shippingName"
+                    type="text"
+                    onChange={handleChange}
+                    value={shippingName}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email">
+                    <small>Email</small>
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    onChange={handleChange}
+                    value={email}
+                  />
+                </div>
+                <label htmlFor="shippingStreet">
+                  <small>Street</small>
+                </label>
+                <input
+                  name="shippingStreet"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingStreet}
+                />
+              </div>
+              <div>
+                <label htmlFor="shippingCity">
+                  <small>City</small>
+                </label>
+                <input
+                  name="shippingCity"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingCity}
+                />
+              </div>
+              <div id="shippingDropdown">
+                <label htmlFor="shippingState">
+                  <small>State:</small>
+                </label>
+                <select name="shippingState" onChange={this.handleChange}>
+                  <option value="none" selected disabled hidden>
+                    Select State
+                  </option>
+                  {this.props.states.map((state, idx) => {
+                    return (
+                      <option key={idx} value={state}>
+                        {state}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="shippingZip">
+                  <small>Zip Code</small>
+                </label>
+                <input
+                  name="shippingZip"
+                  type="text"
+                  onChange={handleChange}
+                  value={shippingZip}
+                />
+              </div>
+            </div>
+            <button type="submit">Continue to Billing</button>
           </form>
         </div>
         <div>
-          <h1>Billing Info</h1>
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="billingAddressName">Name: </label>
-            <input
-              name="billingAddressName"
-              onChange={this.handleChange}
-              value={this.props.singleUser.billingAddressName}
-            />
-            <label htmlFor="billingAddressStreet">Street Address: </label>
-            <input
-              name="billingAddressStreet"
-              onChange={this.handleChange}
-              value={this.props.singleUser.billingAddressStreet}
-            />
-            <label htmlFor="billingAddressCity">City: </label>
-            <input
-              name="billingAddressCity"
-              onChange={this.handleChange}
-              value={this.props.singleUser.billingAddressCity}
-            />
-            <label htmlFor="billingAddressState">State: </label>
-            <input
-              name="billingAddressCity"
-              onChange={this.handleChange}
-              value={this.props.singleUser.billingAddressCity}
-            />
-            <label htmlFor="billingAddressZip">Zip Code: </label>
-            <input
-              name="billingAddressZip"
-              onChange={this.handleChange}
-              value={this.props.singleUser.billingAddressZip}
-            />
-            <button type="submit">Submit</button>
-          </form>
+          {this.state.showBillingForm ? (
+            <form>
+              <h5>Billing Info</h5>
+              <div className="signup-address-info">
+                <div>
+                  <div>
+                    <label htmlFor="billingName">
+                      <small>Name</small>
+                    </label>
+                    <input name="billingName" type="text" />
+                  </div>
+                  <label htmlFor="billingStreet">
+                    <small>Street</small>
+                  </label>
+                  <input name="billingStreet" type="text" />
+                </div>
+                <div>
+                  <label htmlFor="billingCity">
+                    <small>City</small>
+                  </label>
+                  <input name="billingCity" type="text" />
+                </div>
+                <div id="billingDropdown">
+                  <label htmlFor="billingState">
+                    <small>State:</small>
+                  </label>
+                  <select
+                    name="billingState"
+                    onChange={this.selectBillingState}
+                  >
+                    <option value="none" selected disabled hidden>
+                      Select State
+                    </option>
+                    {this.props.states.map((state, idx) => {
+                      return (
+                        <option key={idx} value={state}>
+                          {state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="billingZip">
+                    <small>Zip Code</small>
+                  </label>
+                  <input name="billingZip" type="text" />
+                </div>
+              </div>
+              <div>
+                <button id="signup-button" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     );
@@ -169,11 +270,72 @@ export class Checkout extends React.Component {
 }
 
 const mapState = (state) => {
-  // console.log('state in Checkout component: ', state);
+  console.log('state in Checkout component: ', state.order);
   return {
     singleUser: state.singleUser,
     order: state.order,
     isLoggedIn: !!state.auth.id,
+    states: [
+      'AL',
+      'AK',
+      'AS',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'DC',
+      'FM',
+      'FL',
+      'GA',
+      'GU',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MH',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'MP',
+      'OH',
+      'OK',
+      'OR',
+      'PW',
+      'PA',
+      'PR',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VI',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY',
+    ],
   };
 };
 
