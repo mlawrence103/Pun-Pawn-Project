@@ -123,12 +123,12 @@ router.post("/addToCart", async (req, res, next) => {
   }
 });
 
-router.delete("/deleteItem", async (req, res, next) => {
+router.delete('/:orderId/pun/:punId/deleteItem', async (req, res, next) => {
   try {
     const item = await LineItem.findOne({
       where: {
-        punId: req.body.punId,
-        orderId: req.body.orderId,
+        punId: req.params.punId,
+        orderId: req.params.orderId,
       },
     });
     await item.destroy();

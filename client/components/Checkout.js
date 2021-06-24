@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchUserCart, fetchGuestCart, checkoutCart } from '../store/order';
+import LineItem from './LineItem';
 import { fetchUser, updatingAccount } from '../store/singleUser';
 
 // -local state includes payment info
@@ -30,7 +31,6 @@ export class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    console.log('in component did mount')
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
         this.props.loadUserCart(this.props.userId);
@@ -78,7 +78,7 @@ export class Checkout extends React.Component {
 
   render() {
     // console.log(this.state, 'state in checkout');
-    // console.log(this.props, 'props in checkout');
+    console.log('props.user in checkout: ', this.props.user);
     const puns = this.props.order.puns || [];
     const { handleChange } = this;
     const {
@@ -100,21 +100,10 @@ export class Checkout extends React.Component {
         <div>
           <h1>Cart</h1>
           {puns.map((lineItem) => {
+            // console.log('Line item being mapped over: ', lineItem);
             return (
-              <div
-                className="cart-item"
-                key={lineItem.punId + Math.ceil(Math.random()) * 1000}
-              >
-                <h4>{lineItem.content}</h4>
-                <h5>Quantity:</h5>
-                <input
-                  name="quantity"
-                  type="text"
-                  onChange={handleChange}
-                  value={lineItem.quantity}
-                />
-                <h5>${lineItem.price / 100}</h5>
-                <button>Remove</button>
+              <div key={lineItem.punId + Math.ceil(Math.random()) * 1000}>
+                <LineItem lineItem={lineItem} />
               </div>
             );
           })}
@@ -266,10 +255,11 @@ export class Checkout extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log('state in Checkout component: ', state.order);
+  console.log('checkout state in map state: ', state);
   return {
-    singleUser: state.singleUser,
+    user: state.auth,
     order: state.order,
+    singleUser: state.singleUser,
     isLoggedIn: !!state.auth.userId,
     states: [
       'AL',
