@@ -59,6 +59,7 @@ nav a {
 
 .cart-item h4 {
   width: 15rem;
+}
 
 .listAllPuns {
   display: flex;
@@ -90,5 +91,4 @@ nav a {
 .admin-edit-inventory-buttons {
   display: flex;
   justify-content: space-evenly;
-
 }
