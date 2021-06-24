@@ -30,12 +30,13 @@ export class Checkout extends React.Component {
   }
 
   componentDidMount() {
+    console.log('props in comp did mount in checkout: ', this.props);
     try {
       console.log('is logged in: ', this.props.isLoggedIn);
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
         console.log('user is logged in in checkout');
-        this.props.loadUserCart();
+        this.props.loadUserCart(this.props.user);
         this.props.loadUserInfo();
       } else {
         const currentGuestOrderId = parseInt(
@@ -261,7 +262,77 @@ export class Checkout extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log('state in Checkout component: ', state);
+  console.log('checkout state in map state: ', state);
+  return {
+    user: state.auth,
+    isLoggedIn: !!state.auth.id,
+    order: state.order,
+    states: [
+      'AL',
+      'AK',
+      'AS',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'DC',
+      'FM',
+      'FL',
+      'GA',
+      'GU',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MH',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'MP',
+      'OH',
+      'OK',
+      'OR',
+      'PW',
+      'PA',
+      'PR',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VI',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY',
+    ],
+  };
+};
+
+const mapState2 = (state) => {
+  console.log('checkout state in map state: ', state);
   return {
     singleUser: state.singleUser,
     order: state.order,
