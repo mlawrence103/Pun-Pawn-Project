@@ -160,6 +160,7 @@ export class Checkout extends React.Component {
               onChange={this.handleChange}
               value={this.props.singleUser.billingAddressZip}
             />
+            <button type="submit">Submit</button>
           </form>
         </div>
       </div>
