@@ -99,7 +99,6 @@ export class Checkout extends React.Component {
         <div>
           <h1>Cart</h1>
           {puns.map((lineItem) => {
-            // console.log('Line item being mapped over: ', lineItem);
             return (
               <div key={lineItem.punId + Math.ceil(Math.random()) * 1000}>
                 <LineItem lineItem={lineItem} />
@@ -189,64 +188,57 @@ export class Checkout extends React.Component {
           </form>
         </div>
         <div>
-          {this.state.showBillingForm ? (
-            <form>
-              <h5>Billing Info</h5>
-              <div className="signup-address-info">
+          <form>
+            <h5>Billing Info</h5>
+            <div className="signup-address-info">
+              <div>
                 <div>
-                  <div>
-                    <label htmlFor="billingName">
-                      <small>Name</small>
-                    </label>
-                    <input name="billingName" type="text" />
-                  </div>
-                  <label htmlFor="billingStreet">
-                    <small>Street</small>
+                  <label htmlFor="billingName">
+                    <small>Name</small>
                   </label>
-                  <input name="billingStreet" type="text" />
+                  <input name="billingName" type="text" />
                 </div>
-                <div>
-                  <label htmlFor="billingCity">
-                    <small>City</small>
-                  </label>
-                  <input name="billingCity" type="text" />
-                </div>
-                <div id="billingDropdown">
-                  <label htmlFor="billingState">
-                    <small>State:</small>
-                  </label>
-                  <select
-                    name="billingState"
-                    onChange={this.selectBillingState}
-                  >
-                    <option value="none" selected disabled hidden>
-                      Select State
-                    </option>
-                    {this.props.states.map((state, idx) => {
-                      return (
-                        <option key={idx} value={state}>
-                          {state}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="billingZip">
-                    <small>Zip Code</small>
-                  </label>
-                  <input name="billingZip" type="text" />
-                </div>
+                <label htmlFor="billingStreet">
+                  <small>Street</small>
+                </label>
+                <input name="billingStreet" type="text" />
               </div>
               <div>
-                <button id="signup-button" type="submit">
-                  Submit
-                </button>
+                <label htmlFor="billingCity">
+                  <small>City</small>
+                </label>
+                <input name="billingCity" type="text" />
               </div>
-            </form>
-          ) : (
-            <div></div>
-          )}
+              <div id="billingDropdown">
+                <label htmlFor="billingState">
+                  <small>State:</small>
+                </label>
+                <select name="billingState" onChange={this.selectBillingState}>
+                  <option value="none" selected disabled hidden>
+                    Select State
+                  </option>
+                  {this.props.states.map((state, idx) => {
+                    return (
+                      <option key={idx} value={state}>
+                        {state}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="billingZip">
+                  <small>Zip Code</small>
+                </label>
+                <input name="billingZip" type="text" />
+              </div>
+            </div>
+            <div>
+              <button id="signup-button" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     );
