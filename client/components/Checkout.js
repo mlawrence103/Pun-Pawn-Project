@@ -107,7 +107,6 @@ export class Checkout extends React.Component {
         <div>
           <h1>Cart</h1>
           {puns.map((lineItem) => {
-            // console.log('Line item being mapped over: ', lineItem);
             return (
               <div key={lineItem.punId + Math.ceil(Math.random()) * 1000}>
                 <LineItem lineItem={lineItem} />

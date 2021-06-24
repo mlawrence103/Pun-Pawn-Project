@@ -207,7 +207,6 @@ export const editItemQty = (punId, orderId, qty, price) => {
       const lineItem = { punId: punId, orderId: orderId, quantity: qty };
       const res = await axios.put('/api/orders/editLineItem', lineItem);
       const updatedLineItem = res.data;
-      updatedLineItem['total'] = qty * price;
       dispatch(_editItemQty(updatedLineItem));
     } catch (error) {
       console.log('Failed to edit cart', error);

@@ -8,18 +8,18 @@ class LineItem extends React.Component {
     this.state = {
       quantity: 0,
     };
-    this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.decreaseQuantity = this.decreaseQuantity.bind(this);
+    this.increaseQuantity = this.increaseQuantity.bind(this);
   }
 
-  handleChange(event) {
-    const quantity = event.target.value;
-    const { punId, orderId } = this.props.lineItem.lineItem;
-    const price = this.props.lineItem.price;
-    this.setState({
-      [event.target.name]: quantity,
-    });
-    this.props.updateLineItem(punId, orderId, quantity, price);
+  decreaseQuantity(punId, orderId, qty, price) {
+    this.props.updateLineItem(punId, orderId, qty, price);
+  }
+
+  increaseQuantity(punId, orderId, qty, price) {
+    console.log(punId, orderId, qty, price);
+    this.props.updateLineItem(punId, orderId, qty, price);
   }
 
   handleDelete(punId, orderId) {
@@ -37,22 +37,26 @@ class LineItem extends React.Component {
 
   render() {
     const { lineItem } = this.props;
-    const { handleChange, handleDelete } = this;
-    const { quantity } = this.state;
+    const { increaseQuantity, decreaseQuantity, handleDelete } = this;
+    const punId = this.props.lineItem.lineItem.punId;
+    const orderId = this.props.lineItem.lineItem.orderId;
     return (
       <div className="cart-item">
         <h4>{lineItem.content}</h4>
         <h5>Quantity:</h5>
-        <button>-</button> <h5>{this.props.lineItem.lineItem.quantity}</h5>
-        <button>+</button>
-        <h5>${lineItem.price / 100}</h5>
         <button
-          onClick={() =>
-            handleDelete(lineItem.lineItem.punId, lineItem.lineItem.orderId)
-          }
+          onClick={() => decreaseQuantity(punId, orderId, -1, lineItem.price)}
         >
-          Remove
+          -
         </button>
+        <h5>{lineItem.lineItem.quantity}</h5>
+        <button
+          onClick={() => increaseQuantity(punId, orderId, 1, lineItem.price)}
+        >
+          +
+        </button>
+        <h5>${lineItem.price / 100}</h5>
+        <button onClick={() => handleDelete(punId, orderId)}>Remove</button>
       </div>
     );
   }
