@@ -53,7 +53,10 @@ class LineItem extends React.Component {
         <h5>${lineItem.price / 100}</h5>
         <button
           onClick={() =>
-            handleDelete(lineItem.lineItem.punId, lineItem.lineItem.orderId)
+            this.props.deleteLineItem(
+              lineItem.lineItem.punId,
+              lineItem.lineItem.orderId
+            )
           }
         >
           Remove
@@ -63,9 +66,13 @@ class LineItem extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  order: state.order,
+});
+
 const mapDispatchToProps = (dispatch, { history }) => ({
   updateLineItem: (punId, orderId, qty, price) =>
     dispatch(editItemQty(punId, orderId, qty, price)),
   deleteLineItem: (punId, orderId) => dispatch(deleteFromCart(punId, orderId)),
 });
-export default connect(null, mapDispatchToProps)(LineItem);
+export default connect(mapStateToProps, mapDispatchToProps)(LineItem);
