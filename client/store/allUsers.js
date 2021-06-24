@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-const TOKEN = 'token';
+const TOKEN = "token";
 
 //ACTION TYPES
 
-const SET_USERS = 'SET_USERS';
-const ADD_USER = 'ADD_USER';
-const REMOVE_USER = 'REMOVE_USER';
-const UPDATE_USER = 'UPDATE_USER';
+const SET_USERS = "SET_USERS";
+const ADD_USER = "ADD_USER";
+const REMOVE_USER = "REMOVE_USER";
+const UPDATE_USER = "UPDATE_USER";
 
 //ACTION CREATORS
 
@@ -41,11 +41,11 @@ export const updateUser = (user) => {
 //THUNK CREATORS
 
 export const fetchUsers = () => {
-  console.log('fetch users is being called');
+  console.log("fetch users is being called");
   return async (dispatch) => {
     try {
       const token = window.localStorage.getItem(TOKEN);
-      const { data } = await axios.get('/api/users/admin', {
+      const { data } = await axios.get("/api/users/admin", {
         headers: {
           authorization: token,
         },
@@ -60,9 +60,9 @@ export const fetchUsers = () => {
 export const addingUser = (newUser, history) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.post('/api/users', newUser);
+      const { data } = await axios.post("/api/users", newUser);
       dispatch(addedUser(data));
-      history.push('/users/');
+      history.push("/users/");
     } catch (error) {
       console.error(error);
     }
@@ -82,6 +82,20 @@ export const updatingUser = (id, user) => {
   return async (dispatch) => {
     const { data } = await axios.put(`/api/users/${id}`, user);
     dispatch(updateUser(data));
+  };
+};
+
+export const editUserType = (id, type) => {
+  console.log("id", id, "type", type);
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/users/${id}/editUserType`, {
+        usertype: type,
+      });
+      dispatch(updateUser(data));
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 

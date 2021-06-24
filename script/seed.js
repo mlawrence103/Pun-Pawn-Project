@@ -395,7 +395,7 @@ async function seed() {
 
   const pun45 = await Pun.create({
     content:
-      "I did a theatrical perfermance about puns. I was a play on words.",
+      "I did a theatrical performance about puns. I was a play on words.",
     price: 250,
     quantity: 15,
   });

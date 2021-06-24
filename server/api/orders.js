@@ -1,11 +1,11 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   models: { Order, Pun, LineItem, User },
-} = require('../db');
+} = require("../db");
 
 //get order by orderId (useful for guests)
 //security: if order has userId, then to access must be associated user or admin
-router.get('/:orderId', async (req, res, next) => {
+router.get("/:orderId", async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
     //add eager loading to include where items' order id matches
@@ -29,7 +29,7 @@ router.get('/:orderId', async (req, res, next) => {
 });
 
 //route to get lineItem
-router.get('/:orderId/pun/:punId', async (req, res, next) => {
+router.get("/:orderId/pun/:punId", async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
     const punId = req.params.punId;
@@ -46,7 +46,7 @@ router.get('/:orderId/pun/:punId', async (req, res, next) => {
 });
 
 //create new order
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     //make sure getting proper order instance from store
     const {
@@ -67,7 +67,7 @@ router.post('/', async (req, res, next) => {
           {
             model: Order,
             where: {
-              status: 'open',
+              status: "open",
             },
           },
         ],
@@ -75,10 +75,10 @@ router.post('/', async (req, res, next) => {
       //if user already has an open order, do not create new order
       if (userWithOpenOrder) {
         //is this the proper way to reference this?
-        throw new Error('You cannot create more than one open order per user.');
+        throw new Error("You cannot create more than one open order per user.");
       }
       order = await Order.create({
-        status: 'open',
+        status: "open",
         emailAddress,
         shippingAddressName,
         shippingAddressStreet,
@@ -90,7 +90,7 @@ router.post('/', async (req, res, next) => {
     } else {
       //if guest cart, create new order without userId
       order = await Order.create({
-        status: 'open',
+        status: "open",
         emailAddress,
         shippingAddressName,
         shippingAddressStreet,
@@ -107,8 +107,8 @@ router.post('/', async (req, res, next) => {
 
 //**OPEN ORDER ROUTES */
 
-router.post('/addToCart', async (req, res, next) => {
-  console.log('reached add to cart API route');
+router.post("/addToCart", async (req, res, next) => {
+  console.log("reached add to cart API route");
   try {
     const { punId, orderId, qty, price } = req.body;
     const lineItem = await LineItem.create({
@@ -124,7 +124,6 @@ router.post('/addToCart', async (req, res, next) => {
 });
 
 router.delete('/:orderId/pun/:punId/deleteItem', async (req, res, next) => {
-  console.log('>>>>>> delete route req.params: ', req.params);
   try {
     const item = await LineItem.findOne({
       where: {
@@ -140,7 +139,7 @@ router.delete('/:orderId/pun/:punId/deleteItem', async (req, res, next) => {
 });
 
 //update order total
-router.put('/:id/updateTotal', async (req, res, next) => {
+router.put("/:id/updateTotal", async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id);
     const currentTotal = order.total;
@@ -153,29 +152,8 @@ router.put('/:id/updateTotal', async (req, res, next) => {
   }
 });
 
-//increase lineItem quantity when adding to cart
-// router.put('/increaseLineItem', async (req, res, next) => {
-//   try {
-//     const { punId, orderId, quantity } = req.body;
-//     const item = await LineItem.findOne({
-//       where: {
-//         punId: punId,
-//         orderId: orderId,
-//       },
-//     });
-//     console.log('editing line item: ', item);
-//     const existingQty = item.quantity;
-//     await item.update({
-//       quantity: existingQty + quantity,
-//     });
-//     res.sendStatus(202);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-//update lineItem quantity by input in cart form field
-router.put('/editLineItem', async (req, res, next) => {
+//update lineItem quantity
+router.put("/editLineItem", async (req, res, next) => {
   try {
     const { punId, orderId, quantity } = req.body;
     const item = await LineItem.findOne({
@@ -184,7 +162,7 @@ router.put('/editLineItem', async (req, res, next) => {
         orderId: orderId,
       },
     });
-    console.log('editing line item: ', item);
+    console.log("editing line item: ", item);
     const existingQty = item.quantity;
     await item.update({
       quantity: existingQty + quantity,
@@ -195,7 +173,7 @@ router.put('/editLineItem', async (req, res, next) => {
   }
 });
 
-router.put('/:orderId/checkout', async (req, res, next) => {
+router.put("/:orderId/checkout", async (req, res, next) => {
   try {
     const {
       emailAddress,
@@ -220,11 +198,11 @@ router.put('/:orderId/checkout', async (req, res, next) => {
   }
 });
 
-router.put('/:orderId/submit', async (req, res, next) => {
+router.put("/:orderId/submit", async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.orderId);
     await order.update({
-      status: 'fulfilled',
+      status: "fulfilled",
     });
     res.json(order);
   } catch (error) {
