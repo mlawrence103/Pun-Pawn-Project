@@ -36,7 +36,6 @@ class LineItem extends React.Component {
   }
 
   render() {
-    console.log('props in line item: ', this.props.lineItem);
     const { lineItem } = this.props;
     const { handleChange, handleDelete } = this;
     const { quantity } = this.state;
@@ -53,10 +52,7 @@ class LineItem extends React.Component {
         <h5>${lineItem.price / 100}</h5>
         <button
           onClick={() =>
-            this.props.deleteLineItem(
-              lineItem.lineItem.punId,
-              lineItem.lineItem.orderId
-            )
+            handleDelete(lineItem.lineItem.punId, lineItem.lineItem.orderId)
           }
         >
           Remove

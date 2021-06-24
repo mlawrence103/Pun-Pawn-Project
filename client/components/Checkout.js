@@ -30,14 +30,14 @@ export class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    console.log('props in comp did mount in checkout: ', this.props);
+    console.log('local state in comp did mount in checkout: ', this.state);
     try {
       console.log('is logged in: ', this.props.isLoggedIn);
       const { isLoggedIn } = this.props;
-      if (isLoggedIn) {
-        console.log('user is logged in in checkout');
+      if (!!this.props.user.id) {
+        console.log('user is logged in in checkout: ', this.props.user);
         this.props.loadUserCart(this.props.user);
-        this.props.loadUserInfo();
+        this.props.loadUserInfo(this.props.user.id);
       } else {
         const currentGuestOrderId = parseInt(
           window.localStorage.getItem('currentOrderId')
@@ -85,7 +85,7 @@ export class Checkout extends React.Component {
 
   render() {
     // console.log(this.state, 'state in checkout');
-    console.log(this.props, 'props in checkout');
+    console.log('props.user in checkout: ', this.props.user);
     const puns = this.props.order.puns || [];
     const { handleChange } = this;
     const {
@@ -107,7 +107,7 @@ export class Checkout extends React.Component {
         <div>
           <h1>Cart</h1>
           {puns.map((lineItem) => {
-            console.log('Line item being mapped over: ', lineItem);
+            // console.log('Line item being mapped over: ', lineItem);
             return (
               <div key={lineItem.punId + Math.ceil(Math.random()) * 1000}>
                 <LineItem lineItem={lineItem} />
@@ -267,76 +267,6 @@ const mapState = (state) => {
     user: state.auth,
     isLoggedIn: !!state.auth.id,
     order: state.order,
-    states: [
-      'AL',
-      'AK',
-      'AS',
-      'AZ',
-      'AR',
-      'CA',
-      'CO',
-      'CT',
-      'DE',
-      'DC',
-      'FM',
-      'FL',
-      'GA',
-      'GU',
-      'HI',
-      'ID',
-      'IL',
-      'IN',
-      'IA',
-      'KS',
-      'KY',
-      'LA',
-      'ME',
-      'MH',
-      'MD',
-      'MA',
-      'MI',
-      'MN',
-      'MS',
-      'MO',
-      'MT',
-      'NE',
-      'NV',
-      'NH',
-      'NJ',
-      'NM',
-      'NY',
-      'NC',
-      'ND',
-      'MP',
-      'OH',
-      'OK',
-      'OR',
-      'PW',
-      'PA',
-      'PR',
-      'RI',
-      'SC',
-      'SD',
-      'TN',
-      'TX',
-      'UT',
-      'VT',
-      'VI',
-      'VA',
-      'WA',
-      'WV',
-      'WI',
-      'WY',
-    ],
-  };
-};
-
-const mapState2 = (state) => {
-  console.log('checkout state in map state: ', state);
-  return {
-    singleUser: state.singleUser,
-    order: state.order,
-    isLoggedIn: !!state.auth.id,
     states: [
       'AL',
       'AK',
