@@ -123,12 +123,13 @@ router.post('/addToCart', async (req, res, next) => {
   }
 });
 
-router.delete('/deleteItem', async (req, res, next) => {
+router.delete('/:orderId/pun/:punId/deleteItem', async (req, res, next) => {
+  console.log('>>>>>> delete route req.params: ', req.params);
   try {
     const item = await LineItem.findOne({
       where: {
-        punId: req.body.punId,
-        orderId: req.body.orderId,
+        punId: req.params.punId,
+        orderId: req.params.orderId,
       },
     });
     await item.destroy();
@@ -144,7 +145,7 @@ router.put('/:id/updateTotal', async (req, res, next) => {
     const order = await Order.findByPk(req.params.id);
     const currentTotal = order.total;
     await order.update({
-      total: (currentTotal + req.body.total) / 100,
+      total: currentTotal + req.body.total,
     });
     res.sendStatus(202);
   } catch (error) {
@@ -152,7 +153,28 @@ router.put('/:id/updateTotal', async (req, res, next) => {
   }
 });
 
-//update lineItem quantity
+//increase lineItem quantity when adding to cart
+// router.put('/increaseLineItem', async (req, res, next) => {
+//   try {
+//     const { punId, orderId, quantity } = req.body;
+//     const item = await LineItem.findOne({
+//       where: {
+//         punId: punId,
+//         orderId: orderId,
+//       },
+//     });
+//     console.log('editing line item: ', item);
+//     const existingQty = item.quantity;
+//     await item.update({
+//       quantity: existingQty + quantity,
+//     });
+//     res.sendStatus(202);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+//update lineItem quantity by input in cart form field
 router.put('/editLineItem', async (req, res, next) => {
   try {
     const { punId, orderId, quantity } = req.body;

@@ -186,12 +186,13 @@ export const addToCart = (punId, orderId, qty, price) => {
 };
 
 export const deleteFromCart = (punId, orderId) => {
+  console.log(
+    `in delete from cart thunk with punid: ${punId} and orderId: ${orderId}`
+  );
   return async (dispatch) => {
-    const requestBody = { punId, orderId };
     try {
       const { data: pun } = await axios.delete(
-        '/api/orders/deleteItem',
-        requestBody
+        `/api/orders/${orderId}/pun/${punId}/deleteItem`
       );
       dispatch(_deleteFromCart(pun));
     } catch (error) {

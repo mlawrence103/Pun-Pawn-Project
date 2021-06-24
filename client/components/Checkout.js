@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchUserCart, fetchGuestCart, checkoutCart } from '../store/order';
+import LineItem from './LineItem';
 import { fetchUser, updatingAccount } from '../store/singleUser';
 
 // -local state includes payment info
@@ -28,19 +29,20 @@ export class Checkout extends React.Component {
     this.saveShipping = this.saveShipping.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     try {
+      console.log('is logged in: ', this.props.isLoggedIn);
       const { isLoggedIn } = this.props;
       if (isLoggedIn) {
-        // console.log('user is logged in in checkout');
-        await this.props.loadUserCart();
-        await this.props.loadUserInfo();
+        console.log('user is logged in in checkout');
+        this.props.loadUserCart();
+        this.props.loadUserInfo();
       } else {
         const currentGuestOrderId = parseInt(
           window.localStorage.getItem('currentOrderId')
         );
-        // console.log('guest in checkout with id: ', currentGuestOrderId);
-        await this.props.loadGuestCart(currentGuestOrderId);
+        console.log('guest in checkout with id: ', currentGuestOrderId);
+        this.props.loadGuestCart(currentGuestOrderId);
       }
     } catch (error) {
       console.log(error);
@@ -82,7 +84,7 @@ export class Checkout extends React.Component {
 
   render() {
     // console.log(this.state, 'state in checkout');
-    // console.log(this.props, 'props in checkout');
+    console.log(this.props, 'props in checkout');
     const puns = this.props.order.puns || [];
     const { handleChange } = this;
     const {
@@ -104,21 +106,10 @@ export class Checkout extends React.Component {
         <div>
           <h1>Cart</h1>
           {puns.map((lineItem) => {
+            console.log('Line item being mapped over: ', lineItem);
             return (
-              <div
-                className="cart-item"
-                key={lineItem.punId + Math.ceil(Math.random()) * 1000}
-              >
-                <h4>{lineItem.content}</h4>
-                <h5>Quantity:</h5>
-                <input
-                  name="quantity"
-                  type="text"
-                  onChange={handleChange}
-                  value={lineItem.quantity}
-                />
-                <h5>${lineItem.price / 100}</h5>
-                <button>Remove</button>
+              <div key={lineItem.punId + Math.ceil(Math.random()) * 1000}>
+                <LineItem lineItem={lineItem} />
               </div>
             );
           })}
@@ -270,7 +261,7 @@ export class Checkout extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log('state in Checkout component: ', state.order);
+  console.log('state in Checkout component: ', state);
   return {
     singleUser: state.singleUser,
     order: state.order,
