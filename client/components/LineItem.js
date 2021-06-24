@@ -43,12 +43,8 @@ class LineItem extends React.Component {
       <div className="cart-item">
         <h4>{lineItem.content}</h4>
         <h5>Quantity:</h5>
-        <input
-          name="quantity"
-          type="text"
-          onChange={handleChange}
-          value={quantity}
-        />
+        <button>-</button> <h5>{this.props.lineItem.lineItem.quantity}</h5>
+        <button>+</button>
         <h5>${lineItem.price / 100}</h5>
         <button
           onClick={() =>
